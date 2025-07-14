@@ -77,11 +77,10 @@ export class ContactComponent {
                 if (this.isBrowser) {
                     // EmailJS ile e-posta gönderme
                     const templateParams = {
-                        from_name: this.contactForm.value.name,
-                        from_email: this.contactForm.value.email,
-                        service_type: this.contactForm.value.service,
-                        message: this.contactForm.value.message,
-                        to_name: 'Gülseven Üçerler'
+                        name: this.contactForm.value.name,
+                        email: this.contactForm.value.email,
+                        title: this.contactForm.value.service,
+                        message: this.contactForm.value.message
                     };
 
                     await emailjs.send(
