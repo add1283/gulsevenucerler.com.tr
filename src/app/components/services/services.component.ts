@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 interface Service {
     id: number;
@@ -20,6 +20,21 @@ interface Service {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesComponent {
+    private isBrowser: boolean;
+
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+        this.isBrowser = isPlatformBrowser(this.platformId);
+    }
+
+    scrollToSection(sectionId: string) {
+        if (this.isBrowser) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }
+
     readonly services: readonly Service[] = [
         {
             id: 1,
