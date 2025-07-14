@@ -48,7 +48,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/gulsevenucerler.com.tr/",
+              "baseHref": "/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
