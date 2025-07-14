@@ -1,0 +1,152 @@
+<!-- Contact Section -->
+<section id="contact" class="py-24 zen-gradient relative overflow-hidden">
+  <div class="absolute inset-0 hero-pattern opacity-20"></div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="text-center mb-20">
+      <span
+        class="inline-block px-6 py-3 bg-white/80 text-primary-700 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-white/30">
+        💌 İletişim
+      </span>
+      <h2 class="text-4xl md:text-5xl font-lora font-bold mb-6 text-zen-800">Bana Ulaşın</h2>
+      <p class="text-xl text-zen-600 max-w-3xl mx-auto leading-relaxed">
+        Enerji şifacılığı yolculuğunuza başlamak için benimle iletişime geçin.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Contact Info -->
+      <div class="space-y-8">
+        <div class="glass-card p-8">
+          <h3 class="text-xl font-lora font-semibold text-gradient mb-8">İletişim Bilgileri</h3>
+
+          <div class="space-y-6">
+            <div class="flex items-center space-x-6 group">
+              <div
+                class="w-16 h-16 glass-card flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                  </path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-zen-800 text-lg mb-1">E-posta</h4>
+                <p class="text-zen-600">info&#64;gulsevenucerler.com</p>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-6 group">
+              <div
+                class="w-16 h-16 glass-card flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-zen-800 text-lg mb-1">Konum</h4>
+                <p class="text-zen-600">Bademler, İzmir</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Maps -->
+        <div class="glass-card overflow-hidden">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d98116.10593266788!2d26.968076273828125!3d38.373000000000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14bbd91d8d85cf5b%3A0x87665ac5f2c3b0cf!2sBademler%2C%20%C4%B0zmir!5e0!3m2!1str!2str!4v1673524800000!5m2!1str!2str"
+            width="100%" height="300" style="border:0; border-radius: 1rem;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Bademler, İzmir - Gülseven Üçerler Konum">
+          </iframe>
+        </div>
+
+        <!-- Working Hours -->
+        <div class="glass-card p-8">
+          <h3 class="text-xl font-lora font-semibold text-zen-800 mb-6">Çalışma Saatleri</h3>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <span class="text-zen-600">Pazartesi - Cuma</span>
+              <span class="font-semibold text-zen-800">09:00 - 18:00</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-zen-600">Cumartesi</span>
+              <span class="font-semibold text-zen-800">10:00 - 16:00</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-zen-600">Pazar</span>
+              <span class="font-semibold text-zen-800">Kapalı</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="lg:col-span-2">
+        <div class="glass-card p-8">
+          <h3 class="text-2xl font-lora font-semibold text-gradient mb-8">Randevu Talebi</h3>
+
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-6">
+            <!-- Name Field -->
+            <div class="form-field">
+              <label for="name" class="block text-sm font-semibold text-zen-700 mb-3">Ad Soyad *</label>
+              <input id="name" formControlName="name" type="text"
+                class="w-full px-6 py-4 text-zen-700 focus:outline-none" placeholder="Adınız ve soyadınız">
+              <div *ngIf="getFieldError('name')" class="mt-2 text-sm text-red-600">
+                {{ getFieldError('name') }}
+              </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-field">
+              <label for="email" class="block text-sm font-semibold text-zen-700 mb-3">E-posta *</label>
+              <input id="email" formControlName="email" type="email"
+                class="w-full px-6 py-4 text-zen-700 focus:outline-none" placeholder="ornek@email.com">
+              <div *ngIf="getFieldError('email')" class="mt-2 text-sm text-red-600">
+                {{ getFieldError('email') }}
+              </div>
+            </div>
+
+
+
+            <!-- Service Selection -->
+            <div class="form-field">
+              <label for="service" class="block text-sm font-semibold text-zen-700 mb-3">Hizmet Seçimi *</label>
+              <select id="service" formControlName="service" class="w-full px-6 py-4 text-zen-700 focus:outline-none">
+                <option value="">Hizmet seçiniz</option>
+                <option *ngFor="let service of services" [value]="service.title">{{ service.title }}</option>
+              </select>
+              <div *ngIf="getFieldError('service')" class="mt-2 text-sm text-red-600">
+                {{ getFieldError('service') }}
+              </div>
+            </div>
+
+            <!-- Message Field -->
+            <div class="form-field">
+              <label for="message" class="block text-sm font-semibold text-zen-700 mb-3">Mesaj *</label>
+              <textarea id="message" formControlName="message" rows="5"
+                class="w-full px-6 py-4 text-zen-700 focus:outline-none resize-none"
+                placeholder="Mesajınızı buraya yazınız..."></textarea>
+              <div *ngIf="getFieldError('message')" class="mt-2 text-sm text-red-600">
+                {{ getFieldError('message') }}
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" [disabled]="isFormSubmitting" class="w-full btn-zen group relative overflow-hidden">
+              <svg *ngIf="isFormSubmitting" class="animate-spin w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+              <span class="relative z-10">{{ isFormSubmitting ? 'Gönderiliyor...' : 'Mesaj Gönder' }}</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

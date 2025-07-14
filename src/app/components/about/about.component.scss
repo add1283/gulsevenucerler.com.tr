@@ -1,0 +1,26 @@
+// About Component Styles
+
+.info-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(48px);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 2rem;
+  transition: all 0.5s ease;
+  animation: fade-in-up 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.info-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(160, 118, 255, 0.2);
+}
+
+@keyframes fade-in-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

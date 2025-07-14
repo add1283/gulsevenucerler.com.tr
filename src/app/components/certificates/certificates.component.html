@@ -1,0 +1,144 @@
+<!-- Certificates Section -->
+<section id="certificates" class="py-24 bg-gradient-to-br from-secondary-50 to-accent-50 relative overflow-hidden">
+  <div class="absolute top-0 left-0 w-64 h-64 bg-primary-100/30 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-accent-100/20 rounded-full blur-3xl"></div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="text-center mb-20 animate-fade-in">
+      <span
+        class="inline-block px-6 py-3 bg-primary-100/80 text-primary-700 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-primary-200/50">
+        🏆 Uzman Sertifikaları
+      </span>
+      <h2 class="text-4xl md:text-5xl font-lora font-bold text-zen-800 mb-6">
+        Sertifikalar ve <span class="text-gradient">Eğitimler</span>
+      </h2>
+      <p class="text-xl text-zen-600 max-w-3xl mx-auto leading-relaxed">
+        Enerji şifacılığı alanında aldığım profesyonel eğitimler ve sertifikalar
+      </p>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="flex flex-wrap justify-center gap-4 mb-16 animate-slide-up">
+      <button *ngFor="let filter of ['all', 'reiki', 'accessbars', 'theta']" (click)="setFilter(filter)"
+        [class]="selectedFilter === filter ? 'filter-btn-active' : 'filter-btn'" class="filter-btn">
+        <span class="mr-2">{{ getCategoryName(filter) }}</span>
+        <span class="filter-count">{{ getCategoryCount(filter) }}</span>
+      </button>
+    </div>
+
+    <!-- Certificates Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div *ngFor="let certificate of filteredCertificates; trackBy: trackByCertificate; let i = index"
+        class="certificate-card group cursor-pointer" [class.certificate-visible]="certificate.isVisible"
+        [attr.data-category]="certificate.category" [attr.data-certificate-id]="certificate.id"
+        [style.animation-delay.ms]="i * 100" (click)="openLightbox(certificate)">
+
+        <!-- Certificate Image/Icon -->
+        <div class="certificate-image">
+          <div class="certificate-icon-wrapper">
+            <!-- Lazy loaded image -->
+            <img *ngIf="certificate.imageUrl && certificate.isVisible" [src]="certificate.imageUrl"
+              [alt]="certificate.title" (error)="onImageError($event)" (load)="onImageLoad(certificate)"
+              class="certificate-img lazy-load" loading="lazy">
+
+            <!-- Placeholder while loading -->
+            <div *ngIf="!certificate.isVisible" class="image-placeholder">
+              <div class="loading-spinner"></div>
+            </div>
+
+            <!-- Fallback emoji -->
+            <span class="certificate-icon" [class.hidden]="certificate.imageUrl && certificate.isVisible">
+              {{ certificate.image }}
+            </span>
+
+            <div class="certificate-badge-corner">{{ certificate.year }}</div>
+            <div class="view-overlay">
+              <span class="view-text">🔍 Büyüt</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate Content -->
+        <div class="certificate-content">
+          <div class="certificate-category">{{ getCategoryName(certificate.category) }}</div>
+          <h3 class="certificate-title">{{ certificate.title }}</h3>
+          <p class="certificate-description">{{ certificate.description }}</p>
+
+          <div class="certificate-footer">
+            <div class="certificate-year">{{ certificate.year }}</div>
+            <div class="certificate-status">
+              <span class="status-icon">✓</span>
+              <span>Sertifikalı</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="text-center mt-20">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.2s;">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-number">{{ getCategoryCount('reiki') }}</div>
+          <div class="stat-label">Reiki Sertifikası</div>
+        </div>
+
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.4s;">
+          <div class="stat-icon">🔓</div>
+          <div class="stat-number">{{ getCategoryCount('accessbars') }}</div>
+          <div class="stat-label">AccessBars</div>
+        </div>
+
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.6s;">
+          <div class="stat-icon">🧠</div>
+          <div class="stat-number">{{ getCategoryCount('theta') }}</div>
+          <div class="stat-label">Theta Healing</div>
+        </div>
+
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.8s;">
+          <div class="stat-icon">📚</div>
+          <div class="stat-number">{{ getCategoryCount('all') }}</div>
+          <div class="stat-label">Toplam Sertifika</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox Modal -->
+<div *ngIf="isLightboxOpen && selectedCertificate" class="lightbox-overlay" (click)="onLightboxClick($event)"
+  (keydown)="onKeydown($event)" tabindex="0">
+
+  <div class="lightbox-container">
+    <button class="lightbox-close" (click)="closeLightbox()">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <div class="lightbox-content">
+      <div class="lightbox-image">
+        <img *ngIf="selectedCertificate.imageUrl" [src]="selectedCertificate.imageUrl" [alt]="selectedCertificate.title"
+          (error)="onImageError($event)" class="max-w-full max-h-full object-contain">
+        <div *ngIf="!selectedCertificate.imageUrl" class="fallback-icon">
+          <span class="text-8xl">{{ selectedCertificate.image }}</span>
+        </div>
+      </div>
+
+      <div class="lightbox-info">
+        <div class="certificate-category">{{ getCategoryName(selectedCertificate.category) }}</div>
+        <h2 class="lightbox-title">{{ selectedCertificate.title }}</h2>
+        <p class="lightbox-description">{{ selectedCertificate.description }}</p>
+
+        <div class="lightbox-footer">
+          <div class="certificate-year">{{ selectedCertificate.year }}</div>
+          <div class="certificate-status">
+            <span class="status-icon">✓</span>
+            <span>Sertifikalı</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

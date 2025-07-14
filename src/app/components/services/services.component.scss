@@ -1,0 +1,43 @@
+// Services Component Styles
+
+.service-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(48px);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.5s ease;
+  animation: fade-in-up 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.service-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(82, 192, 133, 0.2);
+}
+
+.gentle-pulse {
+  animation: gentle-pulse 3s ease-in-out infinite;
+}
+
+@keyframes fade-in-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gentle-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}

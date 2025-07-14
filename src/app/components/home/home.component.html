@@ -1,0 +1,97 @@
+<!-- Hero Section -->
+<section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+  <div class="absolute inset-0 hero-pattern opacity-40"></div>
+  <div class="absolute inset-0 zen-gradient"></div>
+
+  <!-- Floating Elements -->
+  <div class="absolute top-20 left-10 w-32 h-32 bg-primary-200/30 rounded-full floating-element blur-xl"></div>
+  <div class="absolute top-40 right-20 w-24 h-24 bg-accent-200/30 rounded-full floating-element blur-xl"
+    style="animation-delay: -2s;"></div>
+  <div class="absolute bottom-32 left-1/4 w-40 h-40 bg-secondary-200/20 rounded-full floating-element blur-xl"
+    style="animation-delay: -4s;"></div>
+
+  <div class="container mx-auto px-6 py-24 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Hero Content -->
+      <div class="text-center lg:text-left animate-fade-in">
+        <div class="mb-8">
+          <span
+            class="inline-block px-6 py-3 bg-primary-100/80 text-primary-700 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-primary-200/50">
+            ✨ Enerji Şifacılığı Uzmanı
+          </span>
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-lora font-bold mb-8 leading-tight">
+          <span class="text-gradient">İç Huzurunuzu</span><br>
+          <span class="text-zen-800">Keşfedin</span>
+        </h1>
+
+        <p class="text-xl md:text-2xl text-zen-600 mb-12 leading-relaxed max-w-2xl">
+          Teta Healing, Reiki ve AccessBars ile enerji şifacılığı alanında uzman <strong
+            class="text-healing font-semibold">Gülseven
+            Üçerler</strong>
+          ile beden, zihin ve ruhunuzda dengeyi yakalayın.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start mb-16">
+          <button (click)="scrollToSection('services')" class="btn-primary group">
+            <span class="mr-2">Hizmetleri Keşfet</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </button>
+          <button (click)="scrollToSection('contact')" class="btn-secondary group">
+            <span class="mr-2">Randevu Al</span>
+            <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="text-4xl font-bold text-healing mb-2">500+</div>
+            <div class="text-zen-600 text-sm">Mutlu Müşteri</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-healing mb-2">5+</div>
+            <div class="text-zen-600 text-sm">Yıl Deneyim</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-healing mb-2">15+</div>
+            <div class="text-zen-600 text-sm">Sertifika</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Image -->
+      <div class="flex justify-center lg:justify-end animate-slide-up">
+        <div class="relative">
+          <div
+            class="w-80 h-80 md:w-96 md:h-96 glass-card zen-breathing flex items-center justify-center aurora-shadow">
+            <div
+              class="w-72 h-72 md:w-88 md:h-88 bg-gradient-to-br from-white/50 to-white/30 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+              <div class="text-8xl zen-breathing">🧘‍♀️</div>
+            </div>
+          </div>
+
+          <!-- Floating elements -->
+          <div class="absolute -top-6 -right-6 w-20 h-20 glass-card flex items-center justify-center floating-element">
+            <span class="text-3xl">✨</span>
+          </div>
+          <div class="absolute -bottom-6 -left-6 w-16 h-16 glass-card flex items-center justify-center floating-element"
+            style="animation-delay: -3s;">
+            <span class="text-2xl">🌟</span>
+          </div>
+          <div class="absolute top-1/2 -left-8 w-12 h-12 bg-accent-400/20 rounded-full floating-element blur-sm"
+            style="animation-delay: -1s;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

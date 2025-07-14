@@ -1,0 +1,75 @@
+// Header component specific styles
+header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    backdrop-filter: blur(25px);
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
+// Glass effect
+.glass-effect {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Brand logo animation
+.logo-container {
+  &:hover {
+    .logo-circle {
+      transform: rotate(360deg);
+      transition: transform 0.6s ease;
+    }
+  }
+}
+
+// Navigation links
+nav a {
+  position: relative;
+
+  &:not(.btn-primary):hover::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #369b5f, #8b5cf6);
+    border-radius: 2px;
+    animation: slideIn 0.3s ease;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+// Mobile menu animation
+.mobile-menu {
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+
+.mobile-menu-open {
+  max-height: 400px;
+}
+
+.mobile-menu-closed {
+  max-height: 0;
+}

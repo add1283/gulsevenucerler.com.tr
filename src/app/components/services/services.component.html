@@ -1,0 +1,65 @@
+<!-- Services Section -->
+<section id="services" class="py-24 meditation-gradient">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-20">
+      <span
+        class="inline-block px-6 py-3 bg-white/80 text-primary-700 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-white/30">
+        🔮 Hizmetlerim
+      </span>
+      <h2 class="text-4xl md:text-5xl font-lora font-bold mb-6 text-zen-800">Şifa Hizmetleri</h2>
+      <p class="text-xl text-zen-600 max-w-3xl mx-auto leading-relaxed">
+        Size özel hazırlanmış şifa seansları ile iç dengenizi ve huzurunuzu bulun.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div *ngFor="let service of services; index as i; trackBy: trackByServiceId" class="service-card group"
+        [style.animation-delay]="i * 200 + 'ms'">
+        <div class="p-8">
+          <!-- Service Icon -->
+          <div class="text-center mb-8">
+            <div
+              class="w-20 h-20 glass-card mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-500 mb-4">
+              <span class="text-4xl zen-breathing">{{ service.icon }}</span>
+            </div>
+            <h3
+              class="text-2xl font-lora font-semibold text-zen-800 group-hover:text-gradient transition-all duration-300">
+              {{ service.title }}
+            </h3>
+          </div>
+
+          <!-- Service Description -->
+          <p class="text-zen-600 mb-8 leading-relaxed text-center">{{ service.description }}</p>
+
+          <!-- Service Features -->
+          <div class="space-y-3 mb-8">
+            <div *ngFor="let feature of service.features; trackBy: trackByFeature" class="flex items-center space-x-3">
+              <div class="w-2 h-2 bg-primary-500 rounded-full gentle-pulse"></div>
+              <span class="text-zen-700 font-medium">{{ feature }}</span>
+            </div>
+          </div>
+
+          <!-- Service Details -->
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center justify-between">
+              <span class="text-zen-600 font-medium">Süre:</span>
+              <span class="text-zen-800 font-semibold">{{ service.duration }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-zen-600 font-medium">Fiyat:</span>
+              <span class="text-healing font-semibold">{{ service.price }}</span>
+            </div>
+          </div>
+
+          <!-- CTA Button -->
+          <button class="w-full btn-zen group relative overflow-hidden">
+            <span class="relative z-10">Randevu Al</span>
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-accent-500 to-secondary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

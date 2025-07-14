@@ -1,0 +1,22 @@
+// Contact Component Styles
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  color: #5d5d58;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: rgba(82, 192, 133, 0.5);
+  box-shadow: 0 0 0 3px rgba(82, 192, 133, 0.1);
+}

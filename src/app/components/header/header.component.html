@@ -1,0 +1,112 @@
+<header class="fixed top-0 left-0 right-0 z-50 glass-effect transition-all duration-500">
+  <nav class="container mx-auto px-6 py-6">
+    <div class="flex items-center justify-between">
+      <!-- Logo/Brand -->
+      <div class="flex items-center space-x-3 group cursor-pointer">
+        <div class="relative">
+          <div
+            class="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-500 group-hover:scale-110">
+            <span class="text-white font-bold text-xl drop-shadow-md">G</span>
+          </div>
+          <div class="absolute -top-1 -right-1 w-4 h-4 bg-accent-400 rounded-full animate-pulse opacity-60"></div>
+        </div>
+        <div class="transition-all duration-300 group-hover:translate-x-1">
+          <h1 class="text-2xl font-lora font-semibold text-gradient">Gülseven Üçerler</h1>
+          <p class="text-sm text-primary-600 font-medium tracking-wide">Enerji Şifa Uzmanı</p>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-10">
+        <a (click)="scrollToSection('home')"
+          class="relative text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-2 px-1 group">
+          <span>Ana Sayfa</span>
+          <div
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 group-hover:w-full transition-all duration-300">
+          </div>
+        </a>
+        <a (click)="scrollToSection('about')"
+          class="relative text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-2 px-1 group">
+          <span>Hakkımda</span>
+          <div
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 group-hover:w-full transition-all duration-300">
+          </div>
+        </a>
+        <a (click)="scrollToSection('services')"
+          class="relative text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-2 px-1 group">
+          <span>Hizmetler</span>
+          <div
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 group-hover:w-full transition-all duration-300">
+          </div>
+        </a>
+        <a (click)="scrollToSection('certificates')"
+          class="relative text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-2 px-1 group">
+          <span>Sertifikalar</span>
+          <div
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 group-hover:w-full transition-all duration-300">
+          </div>
+        </a>
+        <a (click)="scrollToSection('healing-process')"
+          class="relative text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-2 px-1 group">
+          <span>Şifa Yolculuğu</span>
+          <div
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 group-hover:w-full transition-all duration-300">
+          </div>
+        </a>
+        <a (click)="scrollToSection('contact')" class="btn-zen ml-4">
+          <span class="relative z-10">İletişim</span>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button (click)="toggleMenu()"
+        class="md:hidden p-3 rounded-2xl glass-effect hover:bg-white/40 transition-all duration-300 group">
+        <svg [class]="isMenuOpen ? 'hidden' : 'block'"
+          class="w-6 h-6 text-zen-700 group-hover:text-primary-600 transition-colors duration-300" fill="none"
+          stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg [class]="isMenuOpen ? 'block' : 'hidden'"
+          class="w-6 h-6 text-zen-700 group-hover:text-accent-600 transition-colors duration-300" fill="none"
+          stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div [ngClass]="{
+        'mobile-menu-open': isMenuOpen,
+        'mobile-menu-closed': !isMenuOpen
+      }" class="md:hidden overflow-hidden transition-all duration-500 ease-in-out mt-6 border-t border-white/20">
+      <div class="flex flex-col space-y-6 py-6 transform transition-all duration-500 ease-in-out" [ngClass]="{
+          'translate-y-0 opacity-100': isMenuOpen,
+          '-translate-y-4 opacity-0': !isMenuOpen
+        }">
+        <a (click)="scrollToSection('home')"
+          class="text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-3 px-4 rounded-xl hover:bg-white/30 group">
+          <span class="group-hover:translate-x-2 transition-transform duration-300 inline-block">Ana Sayfa</span>
+        </a>
+        <a (click)="scrollToSection('about')"
+          class="text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-3 px-4 rounded-xl hover:bg-white/30 group">
+          <span class="group-hover:translate-x-2 transition-transform duration-300 inline-block">Hakkımda</span>
+        </a>
+        <a (click)="scrollToSection('services')"
+          class="text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-3 px-4 rounded-xl hover:bg-white/30 group">
+          <span class="group-hover:translate-x-2 transition-transform duration-300 inline-block">Hizmetler</span>
+        </a>
+        <a (click)="scrollToSection('certificates')"
+          class="text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-3 px-4 rounded-xl hover:bg-white/30 group">
+          <span class="group-hover:translate-x-2 transition-transform duration-300 inline-block">Sertifikalar</span>
+        </a>
+        <a (click)="scrollToSection('healing-process')"
+          class="text-zen-700 hover:text-primary-600 transition-all duration-300 cursor-pointer font-medium py-3 px-4 rounded-xl hover:bg-white/30 group">
+          <span class="group-hover:translate-x-2 transition-transform duration-300 inline-block">Şifa Yolculuğu</span>
+        </a>
+        <a (click)="scrollToSection('contact')" class="btn-zen inline-block text-center mt-4">
+          <span class="relative z-10">İletişim</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>

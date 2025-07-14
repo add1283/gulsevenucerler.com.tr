@@ -1,0 +1,79 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# GitHub Pages deployment için gerekli permissions
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Concurrent deployments'ı önle
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Inject EmailJS Environment Variables
+        run: |
+          # Environment dosyasındaki placeholder'ları gerçek değerlerle replace et
+          sed -i "s/__EMAILJS_SERVICE_ID__/${{ secrets.EMAILJS_SERVICE_ID }}/g" src/environments/environment.prod.ts
+          sed -i "s/__EMAILJS_TEMPLATE_ID__/${{ secrets.EMAILJS_TEMPLATE_ID }}/g" src/environments/environment.prod.ts
+          sed -i "s/__EMAILJS_PUBLIC_KEY__/${{ secrets.EMAILJS_PUBLIC_KEY }}/g" src/environments/environment.prod.ts
+
+          # Contact component'teki placeholder'ları da replace et
+          sed -i "s/__EMAILJS_SERVICE_ID__/${{ secrets.EMAILJS_SERVICE_ID }}/g" src/app/components/contact/contact.component.ts
+          sed -i "s/__EMAILJS_TEMPLATE_ID__/${{ secrets.EMAILJS_TEMPLATE_ID }}/g" src/app/components/contact/contact.component.ts
+          sed -i "s/__EMAILJS_PUBLIC_KEY__/${{ secrets.EMAILJS_PUBLIC_KEY }}/g" src/app/components/contact/contact.component.ts
+
+          # Kontrol için environment dosyasının son halini göster (secrets görünmez)
+          echo "EmailJS environment variables injected successfully"
+
+      - name: Build Angular App
+        run: |
+          npm run build:github-pages
+          # GitHub Pages için 404 handling
+          cp dist/gulsevenucerler.com.tr/browser/index.html dist/gulsevenucerler.com.tr/browser/404.html
+          # CNAME dosyası varsa kopyala (custom domain için)
+          if [ -f CNAME ]; then cp CNAME dist/gulsevenucerler.com.tr/browser/; fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./dist/gulsevenucerler.com.tr/browser"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
