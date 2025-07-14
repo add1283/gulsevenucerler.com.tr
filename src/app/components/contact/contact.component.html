@@ -144,6 +144,35 @@
               </svg>
               <span class="relative z-10">{{ isFormSubmitting ? 'Gönderiliyor...' : 'Mesaj Gönder' }}</span>
             </button>
+
+            <!-- Success Message -->
+            <div *ngIf="isFormSuccess" class="mt-6 p-6 bg-green-50 border border-green-200 rounded-xl">
+              <div class="flex items-center">
+                <svg class="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                  <h4 class="text-green-800 font-semibold">Mesajınız başarıyla gönderildi!</h4>
+                  <p class="text-green-700 mt-1">En kısa sürede size dönüş yapacağım. Teşekkürler!</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="isFormError" class="mt-6 p-6 bg-red-50 border border-red-200 rounded-xl">
+              <div class="flex items-center">
+                <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                  <h4 class="text-red-800 font-semibold">Mesaj gönderilemedi!</h4>
+                  <p class="text-red-700 mt-1">Bir hata oluştu. Lütfen tekrar deneyin veya doğrudan e-posta gönderin.
+                  </p>
+                </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>

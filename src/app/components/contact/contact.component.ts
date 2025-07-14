@@ -15,6 +15,8 @@ export class ContactComponent {
     contactForm: FormGroup;
     isFormSubmitted = false;
     isFormSubmitting = false;
+    isFormSuccess = false;
+    isFormError = false;
     private isBrowser: boolean;
 
     // EmailJS Configuration - GitHub Actions'da replacement yapılacak
@@ -73,6 +75,9 @@ export class ContactComponent {
         this.isFormSubmitted = true;
         if (this.contactForm.valid && !this.isFormSubmitting) {
             this.isFormSubmitting = true;
+            // Eski mesajları temizle
+            this.isFormSuccess = false;
+            this.isFormError = false;
             try {
                 if (this.isBrowser) {
                     // EmailJS ile e-posta gönderme
@@ -89,17 +94,30 @@ export class ContactComponent {
                         templateParams
                     );
 
-                    alert('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağım.');
+                    this.isFormSuccess = true;
                     this.contactForm.reset();
                     this.isFormSubmitted = false;
+                    // 5 saniye sonra success mesajını gizle
+                    setTimeout(() => {
+                        this.isFormSuccess = false;
+                    }, 5000);
                 } else {
                     // Server-side rendering için fallback
                     console.log('Form submitted:', this.contactForm.value);
-                    alert('Mesajınız kaydedildi. Sayfa yeniden yüklendiğinde gönderilecek.');
+                    this.isFormSuccess = true;
+                    this.contactForm.reset();
+                    this.isFormSubmitted = false;
+                    setTimeout(() => {
+                        this.isFormSuccess = false;
+                    }, 5000);
                 }
             } catch (error) {
                 console.error('Email gönderme hatası:', error);
-                alert('Bir hata oluştu. Lütfen tekrar deneyin veya doğrudan e-posta gönderin.');
+                this.isFormError = true;
+                // 5 saniye sonra error mesajını gizle
+                setTimeout(() => {
+                    this.isFormError = false;
+                }, 5000);
             } finally {
                 this.isFormSubmitting = false;
             }
