@@ -42,6 +42,12 @@ function parseRSSContent(rssText) {
     const pubDate = item.getElementsByTagName('pubDate')[0]?.textContent || '';
     const guid = item.getElementsByTagName('guid')[0]?.textContent || '';
 
+    // Boş başlık kontrolü
+    if (!title.trim()) {
+      console.warn('⚠️  Skipping post with empty title');
+      continue;
+    }
+
     // İçeriği temizle (HTML tag'leri kaldır)
     const cleanDescription = description
       .replace(/<[^>]*>/g, '') // HTML tag'leri kaldır
@@ -65,8 +71,8 @@ function parseRSSContent(rssText) {
       slug,
       excerpt,
       content: cleanDescription,
-                      originalUrl: link,
-                image: '/images/default-blog-image.png',
+      originalUrl: link,
+      image: '/images/default-blog-image.png',
       publishedAt: publishDate.toISOString(),
       publishedDate: publishDate.toLocaleDateString('tr-TR'),
       readTime: Math.max(1, Math.ceil(cleanDescription.split(' ').length / 200)) // ortalama okuma süresi
@@ -77,6 +83,47 @@ function parseRSSContent(rssText) {
   return posts.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 }
 
+function loadExistingBlogData(filePath) {
+  try {
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf-8');
+      return JSON.parse(data);
+    }
+  } catch (error) {
+    console.warn('⚠️  Could not load existing blog data:', error.message);
+  }
+  return [];
+}
+
+function hasNewPosts(existingPosts, newPosts) {
+  if (existingPosts.length !== newPosts.length) {
+    return true;
+  }
+
+  // ID'lere göre karşılaştır
+  const existingIds = new Set(existingPosts.map(post => post.id));
+  const newIds = new Set(newPosts.map(post => post.id));
+
+  // Yeni ID varsa güncelleme gerekli
+  for (const id of newIds) {
+    if (!existingIds.has(id)) {
+      return true;
+    }
+  }
+
+  // İçerik değişikliği kontrolü (title, content)
+  for (const newPost of newPosts) {
+    const existingPost = existingPosts.find(p => p.id === newPost.id);
+    if (existingPost) {
+      if (existingPost.title !== newPost.title || existingPost.content !== newPost.content) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 function updateSitemap(posts) {
   const sitemapPath = path.join(__dirname, '../public/sitemap.xml');
   let sitemap = fs.readFileSync(sitemapPath, 'utf-8');
@@ -84,13 +131,14 @@ function updateSitemap(posts) {
   // Mevcut blog URL'lerini kaldır
   sitemap = sitemap.replace(/<url>\s*<loc>https:\/\/gulsevenucerler\.com\.tr\/blog.*?<\/url>/gs, '');
 
-  // Blog ana sayfası ekle
+  // Blog ana sayfası ekle (lastmod sadece yeni post varsa güncellenir)
+  const today = new Date().toISOString().split('T')[0];
   const blogMainUrl = `
   <url>
     <loc>https://gulsevenucerler.com.tr/blog</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <lastmod>${today}</lastmod>
   </url>`;
 
   // Blog post URL'lerini oluştur
@@ -114,29 +162,62 @@ async function main() {
     console.log('🔄 Fetching RSS feed from:', RSS_URL);
 
     const rssContent = await fetchRSS(RSS_URL);
+
+    if (!rssContent || rssContent.trim().length === 0) {
+      console.log('⏸️  RSS feed is empty or not available yet');
+      console.log('💤 Blog sync will be skipped until content is available');
+      process.exit(2); // Exit code 2 = not ready (different from error)
+    }
+
     console.log('✅ RSS feed fetched successfully');
 
-    const posts = parseRSSContent(rssContent);
-    console.log(`📄 Parsed ${posts.length} blog posts`);
+    const newPosts = parseRSSContent(rssContent);
 
-    // Blog data dosyasını oluştur
+    if (newPosts.length === 0) {
+      console.log('⏸️  No valid posts found in RSS feed yet');
+      console.log('💤 Blog sync will be skipped until posts are available');
+      process.exit(2); // Exit code 2 = not ready
+    }
+
+    console.log(`📄 Parsed ${newPosts.length} blog posts`);
+
+    // Mevcut blog verisini yükle
     const publicBlogDataPath = path.join(__dirname, '../public/blog-data.json');
     const assetsBlogDataPath = path.join(__dirname, '../src/assets/blog-data.json');
 
-    // Component'ler direkt array bekliyor, wrapper object değil
-    fs.writeFileSync(publicBlogDataPath, JSON.stringify(posts, null, 2));
-    fs.writeFileSync(assetsBlogDataPath, JSON.stringify(posts, null, 2));
+    const existingPosts = loadExistingBlogData(publicBlogDataPath);
+    console.log(`📚 Found ${existingPosts.length} existing posts`);
+
+    // Yeni post kontrolü
+    if (!hasNewPosts(existingPosts, newPosts)) {
+      console.log('ℹ️  No new posts or changes detected. Skipping update.');
+      process.exit(0);
+    }
+
+    console.log('🆕 New posts or changes detected. Updating files...');
+
+    // Blog data dosyalarını güncelle
+    fs.writeFileSync(publicBlogDataPath, JSON.stringify(newPosts, null, 2));
+    fs.writeFileSync(assetsBlogDataPath, JSON.stringify(newPosts, null, 2));
 
     console.log('✅ Blog data saved to public/blog-data.json and src/assets/blog-data.json');
 
     // Sitemap'i güncelle
-    updateSitemap(posts);
+    updateSitemap(newPosts);
 
     console.log('🎉 Blog sync completed successfully!');
 
   } catch (error) {
     console.error('❌ Error syncing blog:', error);
-    process.exit(1);
+
+    // Network error vs other errors
+    if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
+      console.log('🔌 Network issue detected - RSS feed may not be ready yet');
+      console.log('💤 Blog sync will be retried in the next scheduled run');
+      process.exit(2); // Exit code 2 = not ready
+    }
+
+    process.exit(1); // Exit code 1 = actual error
   }
 }
 

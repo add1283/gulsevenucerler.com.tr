@@ -1,9 +1,9 @@
-name: Blog RSS Sync
+name: Blog RSS Sync & Sitemap Update
 
 on:
   schedule:
-    # Her saat başı RSS kontrol et
-    - cron: "0 * * * *"
+    # Her 6 saatte bir RSS kontrol et (günde 4 kez: 00:00, 06:00, 12:00, 18:00)
+    - cron: "0 */6 * * *"
 
   # Manuel trigger için
   workflow_dispatch:
@@ -29,34 +29,113 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Sync RSS and Generate Blog Data
-        run: node scripts/sync-rss.js
+      - name: Sync RSS and Update Blog Data & Sitemap
+        id: sync
+        run: |
+          echo "Running RSS sync..."
+          if node scripts/sync-rss.js; then
+            echo "sync_status=success" >> $GITHUB_OUTPUT
+            echo "✅ RSS sync completed successfully"
+          else
+            exit_code=$?
+            case $exit_code in
+              0)
+                echo "sync_status=no_changes" >> $GITHUB_OUTPUT
+                echo "ℹ️  No changes detected, skipping commit"
+                ;;
+              2)
+                echo "sync_status=not_ready" >> $GITHUB_OUTPUT
+                echo "⏸️  Blog RSS not ready yet, skipping sync"
+                ;;
+              *)
+                echo "sync_status=failed" >> $GITHUB_OUTPUT
+                echo "❌ RSS sync failed with exit code: $exit_code"
+                exit 1
+                ;;
+            esac
+          fi
         env:
           # Blogspot RSS URL (kullanıcı tarafından ayarlanacak)
           RSS_URL: ${{ secrets.BLOGSPOT_RSS_URL || 'https://gulsevenucerler.blogspot.com/feeds/posts/default?alt=rss' }}
 
-      - name: Build Site
-        run: npm run build
+      - name: Check for Changes
+        id: changes
+        if: steps.sync.outputs.sync_status == 'success'
+        run: |
+          if git diff --exit-code --quiet public/blog-data.json src/assets/blog-data.json public/sitemap.xml; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  No file changes detected (this shouldn't happen after successful sync)"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Changes detected in blog data and sitemap"
+            echo "📄 Modified files:"
+            git diff --name-only public/blog-data.json src/assets/blog-data.json public/sitemap.xml || true
+          fi
 
       - name: Commit and Push Changes
+        if: steps.sync.outputs.sync_status == 'success' && steps.changes.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
+          git config --local user.name "GitHub Action [Blog Sync]"
 
-          # Sadece değişiklik varsa commit et
-          if ! git diff --staged --exit-code; then
-            git commit -m "auto: Update blog content from RSS feed [skip ci]"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
-          else
-            echo "No changes to commit"
-          fi
+          # Blog data ve sitemap dosyalarını stage'e al
+          git add public/blog-data.json src/assets/blog-data.json public/sitemap.xml
+
+          # Değişen dosya sayısını hesapla
+          CHANGED_FILES=$(git diff --cached --name-only | wc -l)
+
+          # Commit mesajını oluştur
+          COMMIT_MSG="🆕 Update blog content and sitemap
+
+          📝 New blog posts detected from RSS feed
+          📄 Updated files: blog-data.json, sitemap.xml
+          🤖 Auto-sync triggered by: ${{ github.event_name }}
+          📊 Files changed: $CHANGED_FILES
+
+          [skip ci]"
+
+          git commit -m "$COMMIT_MSG"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/gulsevenucerler.com.tr
+      # Deployment kısmı kaldırıldı - deploy.yml bunu hallediyor
+
+      - name: Workflow Summary
+        run: |
+          case "${{ steps.sync.outputs.sync_status }}" in
+            "success")
+              if [ "${{ steps.changes.outputs.changed }}" == "true" ]; then
+                echo "🎉 Blog sync completed successfully!"
+                echo "📝 New blog content detected and updated"
+                echo "🚀 Changes committed and pushed to main branch"
+                echo "📄 Updated files:"
+                echo "  ✅ public/blog-data.json"
+                echo "  ✅ src/assets/blog-data.json"
+                echo "  ✅ public/sitemap.xml"
+              else
+                echo "⚠️  Sync completed but no file changes detected"
+                echo "📄 This might indicate an issue with the sync process"
+              fi
+              ;;
+            "no_changes")
+              echo "ℹ️  Blog sync completed - No new content available"
+              echo "📄 RSS feed content is already up to date"
+              echo "💾 Existing blog data preserved"
+              ;;
+            "not_ready")
+              echo "⏸️  Blog RSS sync skipped - Content not ready yet"
+              echo "🔗 RSS feed is not available or contains no posts"
+              echo "📅 This is normal if blog content hasn't been added yet"
+              echo "🔄 Sync will automatically retry on next scheduled run"
+              echo "💡 No action needed - workflow will resume once blog is ready"
+              ;;
+            "failed")
+              echo "❌ Blog sync failed"
+              echo "🔍 Check RSS feed availability and format"
+              echo "📡 RSS URL: ${{ env.RSS_URL }}"
+              ;;
+            *)
+              echo "❓ Unknown sync status: ${{ steps.sync.outputs.sync_status }}"
+              ;;
+          esac
