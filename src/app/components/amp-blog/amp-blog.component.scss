@@ -1,0 +1,353 @@
+// AMP Blog Component Styles - Minimal & Fast
+.amp-container {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  color: #374151;
+  background: #f8fafc;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+// Loading State
+.amp-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+
+  .amp-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid #369b5f;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #6b7280;
+    font-size: 16px;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Error State
+.amp-error {
+  text-align: center;
+  padding: 40px 20px;
+
+  h2 {
+    color: #dc2626;
+    margin-bottom: 16px;
+    font-size: 24px;
+  }
+
+  p {
+    color: #6b7280;
+    margin-bottom: 24px;
+  }
+}
+
+// Header
+.amp-header {
+  background: #ffffff;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.amp-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.amp-logo {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #369b5f, #8b5cf6);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.amp-brand-text {
+  h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #1f2937;
+  }
+
+  p {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0;
+  }
+}
+
+.amp-view-original {
+  background: #369b5f;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: #2d7a4f;
+  }
+}
+
+// Article
+.amp-article {
+  background: white;
+  margin: 0;
+}
+
+.amp-featured-image {
+  width: 100%;
+  max-height: 300px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+.amp-meta {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  background: #f9fafb;
+}
+
+.amp-date,
+.amp-read-time {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.amp-date {
+  font-weight: 500;
+}
+
+// Title & Content
+.amp-title {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1f2937;
+  margin: 0;
+  padding: 20px;
+}
+
+.amp-excerpt {
+  padding: 0 20px 20px;
+  font-size: 18px;
+  color: #4b5563;
+  border-bottom: 2px solid #f3f4f6;
+  margin-bottom: 20px;
+}
+
+.amp-content {
+  padding: 0 20px 40px;
+}
+
+.amp-content-text {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #374151;
+
+  // Paragraf aralıkları
+  white-space: pre-line;
+}
+
+// Action Buttons
+.amp-original-link {
+  background: #f9fafb;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+
+  p {
+    margin: 0 0 16px 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+}
+
+.amp-navigation {
+  padding: 20px;
+  text-align: center;
+}
+
+// Buttons
+.amp-btn-primary {
+  background: #369b5f;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #2d7a4f;
+  }
+}
+
+.amp-btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #e5e7eb;
+  }
+}
+
+// Footer
+.amp-footer {
+  background: #1f2937;
+  color: white;
+  padding: 30px 20px;
+  margin-top: 40px;
+}
+
+.amp-footer-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.amp-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  .amp-logo {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #9ca3af;
+    margin: 0;
+  }
+}
+
+.amp-footer-info {
+  text-align: center;
+
+  p {
+    font-size: 14px;
+    color: #9ca3af;
+    margin: 8px 0;
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .amp-title {
+    font-size: 24px;
+    padding: 16px;
+  }
+
+  .amp-excerpt {
+    padding: 0 16px 16px;
+    font-size: 16px;
+  }
+
+  .amp-content {
+    padding: 0 16px 32px;
+  }
+
+  .amp-content-text {
+    font-size: 15px;
+  }
+
+  .amp-header {
+    padding: 12px 16px;
+  }
+
+  .amp-brand-text h1 {
+    font-size: 16px;
+  }
+
+  .amp-view-original {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+// Performance Optimizations
+* {
+  box-sizing: border-box;
+}
+
+// Minimal animations for better performance
+.amp-btn-primary,
+.amp-btn-secondary,
+.amp-view-original {
+  transition: background-color 0.15s ease;
+}
+
+// Print styles
+@media print {
+
+  .amp-header,
+  .amp-footer,
+  .amp-navigation,
+  .amp-original-link {
+    display: none;
+  }
+
+  .amp-article {
+    box-shadow: none;
+  }
+}

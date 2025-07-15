@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
 
 interface BlogPost {
     id: string;
@@ -23,7 +25,7 @@ interface BlogData {
 @Component({
     selector: 'app-blog',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, HeaderComponent, FooterComponent],
     templateUrl: './blog.component.html',
     styleUrl: './blog.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -59,8 +61,8 @@ export class BlogComponent implements OnInit {
             const response = await fetch('/blog-data.json');
             if (!response.ok) throw new Error('Blog data not found');
 
-            const blogData: BlogData = await response.json();
-            this.posts = blogData.posts;
+            const blogPosts: BlogPost[] = await response.json();
+            this.posts = blogPosts;
             this.filteredPosts = [...this.posts];
             this.updatePagination();
             this.loading = false;

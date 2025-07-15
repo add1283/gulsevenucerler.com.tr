@@ -2,8 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy, Inject, PLATFORM_ID } from 
 import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
 
 interface BlogPost {
     id: string;
@@ -18,26 +16,19 @@ interface BlogPost {
     image?: string;
 }
 
-interface BlogData {
-    posts: BlogPost[];
-    lastUpdated: string;
-    totalPosts: number;
-}
-
 @Component({
-    selector: 'app-blog-detail',
+    selector: 'app-amp-blog',
     standalone: true,
-    imports: [CommonModule, HeaderComponent, FooterComponent],
-    templateUrl: './blog-detail.component.html',
-    styleUrl: './blog-detail.component.scss',
+    imports: [CommonModule],
+    templateUrl: './amp-blog.component.html',
+    styleUrl: './amp-blog.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BlogDetailComponent implements OnInit {
+export class AmpBlogComponent implements OnInit {
     post: BlogPost | null = null;
     loading = true;
     error = false;
-    relatedPosts: BlogPost[] = [];
-
+    currentYear = new Date().getFullYear();
     private isBrowser: boolean;
 
     constructor(
@@ -53,9 +44,8 @@ export class BlogDetailComponent implements OnInit {
 
     ngOnInit() {
         this.route.params.subscribe(params => {
-            const slug = params['slug'];
-            if (slug) {
-                this.loadBlogPost(slug);
+            if (params['slug']) {
+                this.loadBlogPost(params['slug']);
             }
         });
     }
@@ -78,19 +68,11 @@ export class BlogDetailComponent implements OnInit {
                 return;
             }
 
-            // İlgili yazıları bul (aynı kategoride veya rastgele 3 yazı)
-            this.relatedPosts = blogPosts
-                .filter(p => p.slug !== slug)
-                .slice(0, 3);
-
             // SEO ve structured data güncellemeleri
-            this.updateSEO();
-            this.addStructuredData();
+            this.updateAmpSEO();
+            this.addAmpStructuredData();
 
             this.loading = false;
-
-            // Scroll to top
-            this.scrollToTop();
 
         } catch (error) {
             console.error('Error loading blog post:', error);
@@ -99,12 +81,10 @@ export class BlogDetailComponent implements OnInit {
         }
     }
 
-    goToBlog() {
-        this.router.navigate(['/blog']);
-    }
-
-    goToPost(post: BlogPost) {
-        this.router.navigate(['/blog', post.slug]);
+    goToOriginalArticle() {
+        if (this.post && this.isBrowser) {
+            window.location.href = `/blog/${this.post.slug}`;
+        }
     }
 
     openOriginalPost() {
@@ -113,42 +93,29 @@ export class BlogDetailComponent implements OnInit {
         }
     }
 
-    scrollToTop() {
-        if (this.isBrowser) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }
-
-    private updateSEO() {
+    private updateAmpSEO() {
         if (!this.post) return;
 
         // Sayfa başlığını güncelle
-        this.titleService.setTitle(`${this.post.title} - Gülseven Üçerler Blog`);
+        this.titleService.setTitle(`${this.post.title} - Gülseven Üçerler Blog (AMP)`);
 
-        // Meta taglerini güncelle
+        // AMP specific meta taglar
         this.meta.updateTag({ name: 'description', content: this.post.excerpt });
         this.meta.updateTag({ property: 'og:title', content: this.post.title });
         this.meta.updateTag({ property: 'og:description', content: this.post.excerpt });
         this.meta.updateTag({ property: 'og:image', content: `https://gulsevenucerler.com.tr${this.post.image}` });
-        this.meta.updateTag({ property: 'og:url', content: `https://gulsevenucerler.com.tr/blog/${this.post.slug}` });
+        this.meta.updateTag({ property: 'og:url', content: `https://gulsevenucerler.com.tr/amp/${this.post.slug}` });
         this.meta.updateTag({ property: 'og:type', content: 'article' });
-        this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-        this.meta.updateTag({ name: 'twitter:title', content: this.post.title });
-        this.meta.updateTag({ name: 'twitter:description', content: this.post.excerpt });
-        this.meta.updateTag({ name: 'twitter:image', content: `https://gulsevenucerler.com.tr${this.post.image}` });
 
-        // Canonical link ekle
+        // Canonical link (normal sayfaya)
         this.meta.updateTag({ rel: 'canonical', href: `https://gulsevenucerler.com.tr/blog/${this.post.slug}` });
-
-        // AMP link ekle
-        this.meta.updateTag({ rel: 'amphtml', href: `https://gulsevenucerler.com.tr/amp/${this.post.slug}` });
     }
 
-    private addStructuredData() {
+    private addAmpStructuredData() {
         if (!this.post || !this.isBrowser) return;
 
         // Önceki structured data varsa kaldır
-        const existingScript = this.document.getElementById('blog-structured-data');
+        const existingScript = this.document.getElementById('amp-structured-data');
         if (existingScript) {
             existingScript.remove();
         }
@@ -158,7 +125,12 @@ export class BlogDetailComponent implements OnInit {
             "@type": "Article",
             "headline": this.post.title,
             "description": this.post.excerpt,
-            "image": `https://gulsevenucerler.com.tr${this.post.image}`,
+            "image": {
+                "@type": "ImageObject",
+                "url": `https://gulsevenucerler.com.tr${this.post.image}`,
+                "width": 1200,
+                "height": 630
+            },
             "datePublished": this.post.publishedAt,
             "dateModified": this.post.publishedAt,
             "author": {
@@ -174,22 +146,26 @@ export class BlogDetailComponent implements OnInit {
                 "name": "Gülseven Üçerler",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://gulsevenucerler.com.tr/images/social-image.png"
+                    "url": "https://gulsevenucerler.com.tr/images/social-image.png",
+                    "width": 1200,
+                    "height": 630
                 }
             },
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": `https://gulsevenucerler.com.tr/blog/${this.post.slug}`
+                "@id": `https://gulsevenucerler.com.tr/amp/${this.post.slug}`
             },
             "articleSection": "Enerji Şifacılığı",
-            "keywords": ["theta healing", "reiki", "enerji şifacılığı", "kişisel gelişim", "meditasyon"],
+            "keywords": ["theta healing", "reiki", "enerji şifacılığı", "kişisel gelişim", "meditasyon", "amp"],
             "wordCount": this.post.content.split(' ').length,
-            "timeRequired": `PT${this.post.readTime}M`
+            "timeRequired": `PT${this.post.readTime}M`,
+            "isAccessibleForFree": true,
+            "url": `https://gulsevenucerler.com.tr/amp/${this.post.slug}`
         };
 
         const script = this.document.createElement('script');
         script.type = 'application/ld+json';
-        script.id = 'blog-structured-data';
+        script.id = 'amp-structured-data';
         script.textContent = JSON.stringify(structuredData);
         this.document.head.appendChild(script);
     }

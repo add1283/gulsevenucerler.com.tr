@@ -1,0 +1,100 @@
+<!-- AMP Blog Post -->
+<div class="amp-container">
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="amp-loading">
+    <div class="amp-spinner"></div>
+    <p>Makale yükleniyor...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="amp-error">
+    <h2>Makale bulunamadı</h2>
+    <p>Aradığınız blog yazısı mevcut değil veya kaldırılmış olabilir.</p>
+    <button (click)="goToOriginalArticle()" class="amp-btn-primary">
+      Ana Blog Sayfasına Dön
+    </button>
+  </div>
+
+  <!-- Post Content -->
+  <article *ngIf="post && !loading && !error" class="amp-article">
+
+    <!-- Header -->
+    <header class="amp-header">
+      <div class="amp-brand">
+        <div class="amp-logo">G</div>
+        <div class="amp-brand-text">
+          <h1>Gülseven Üçerler</h1>
+          <p>Enerji Şifacılığı Blog</p>
+        </div>
+      </div>
+
+      <!-- View Original Link -->
+      <button (click)="goToOriginalArticle()" class="amp-view-original">
+        Tam Sürüm
+      </button>
+    </header>
+
+    <!-- Featured Image -->
+    <div class="amp-featured-image">
+      <img [src]="post.image || '/images/default-blog-image.png'" [alt]="post.title" width="600" height="315"
+        layout="responsive" />
+    </div>
+
+    <!-- Article Meta -->
+    <div class="amp-meta">
+      <time class="amp-date">{{ post.publishedDate }}</time>
+      <span class="amp-read-time">{{ post.readTime }} dk okuma</span>
+    </div>
+
+    <!-- Article Title -->
+    <h1 class="amp-title">{{ post.title }}</h1>
+
+    <!-- Article Excerpt -->
+    <div class="amp-excerpt">
+      {{ post.excerpt }}
+    </div>
+
+    <!-- Article Content -->
+    <div class="amp-content">
+      <div class="amp-content-text">
+        {{ post.content }}
+      </div>
+    </div>
+
+    <!-- Read Original Post -->
+    <div class="amp-original-link">
+      <p>Bu yazının tam halini okumak için:</p>
+      <button (click)="openOriginalPost()" class="amp-btn-primary">
+        Orijinal Yazıyı Oku
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <div class="amp-navigation">
+      <button (click)="goToOriginalArticle()" class="amp-btn-secondary">
+        ← Blog Ana Sayfa
+      </button>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="amp-footer">
+    <div class="amp-footer-content">
+      <div class="amp-footer-brand">
+        <div class="amp-logo">G</div>
+        <div>
+          <h3>Gülseven Üçerler</h3>
+          <p>Enerji Şifacılığı Uzmanı</p>
+        </div>
+      </div>
+
+      <div class="amp-footer-info">
+        <p>© {{ currentYear || 2025 }} Gülseven Üçerler. Tüm hakları saklıdır.</p>
+        <p>AMP Sürüm - Hızlı Mobil Deneyim</p>
+      </div>
+    </div>
+  </footer>
+
+</div>

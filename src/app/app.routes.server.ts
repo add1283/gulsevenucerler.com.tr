@@ -14,6 +14,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path: 'amp/**',
+    renderMode: RenderMode.Client
+  },
+  {
     path: 'reply',
     renderMode: RenderMode.Prerender
   },
