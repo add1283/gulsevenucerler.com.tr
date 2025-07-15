@@ -55,10 +55,19 @@ jobs:
       - name: Build Angular App
         run: |
           npm run build:github-pages
-          # GitHub Pages için 404 handling
-          cp dist/gulsevenucerler.com.tr/browser/index.html dist/gulsevenucerler.com.tr/browser/404.html
+
+          # Angular SSR nedeniyle index.csr.html oluşuyor, GitHub Pages için index.html'e kopyala
+          cp dist/gulsevenucerler.com.tr/browser/index.csr.html dist/gulsevenucerler.com.tr/browser/index.html
+
+          # GitHub Pages için 404 handling (CSR dosyasından kopyala)
+          cp dist/gulsevenucerler.com.tr/browser/index.csr.html dist/gulsevenucerler.com.tr/browser/404.html
+
           # CNAME dosyası varsa kopyala (custom domain için)
           if [ -f CNAME ]; then cp CNAME dist/gulsevenucerler.com.tr/browser/; fi
+
+          # Build sonucu kontrol
+          echo "Build tamamlandı. Dosyalar:"
+          ls -la dist/gulsevenucerler.com.tr/browser/ | grep -E '\.(html|json|js|css)$'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
