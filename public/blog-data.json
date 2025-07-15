@@ -1,38 +1,5 @@
-[
-  {
-    "id": "dummy-1",
-    "title": "Enerji Şifacılığında İlk Adımlar",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
-    "publishedAt": "2025-01-20T10:00:00Z",
-    "publishedDate": "20 Ocak 2025",
-    "slug": "enerji-sifaciliginda-ilk-adimlar",
-    "excerpt": "Enerji şifacılığına giriş yapmak isteyenler için temel bilgiler ve pratik öneriler.",
-    "readTime": 5,
-    "originalUrl": "#",
-    "image": "/images/default-blog-image.png"
-  },
-  {
-    "id": "dummy-2",
-    "title": "Theta Healing Meditasyonu ve Faydaları",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris congue euismod purus at semper. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.\n\nVestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum.\n\nDonec tempor consectetur libero. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.\n\nCurabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor.",
-    "publishedAt": "2025-01-18T14:30:00Z",
-    "publishedDate": "18 Ocak 2025",
-    "slug": "theta-healing-meditasyonu-ve-faydalari",
-    "excerpt": "Theta Healing meditasyonunun zihin ve beden üzerindeki olumlu etkilerini keşfedin.",
-    "readTime": 4,
-    "originalUrl": "#",
-    "image": "/images/default-blog-image.png"
-  },
-  {
-    "id": "dummy-3",
-    "title": "Reiki ile Stres Yönetimi Teknikleri",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\n\nNullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.\n\nMaecenas faucibus mollis interdum. Sed posuere consectetur est at lobortis. Etiam porta sem malesuada magna mollis euismod. Donec id elit non mi porta gravida at eget metus.\n\nAenean lacinia bibendum nulla sed consectetur. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\n\nVivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.",
-    "publishedAt": "2025-01-15T09:15:00Z",
-    "publishedDate": "15 Ocak 2025",
-    "slug": "reiki-ile-stres-yonetimi-teknikleri",
-    "excerpt": "Günlük hayatta karşılaştığımız stresle başa çıkmak için Reiki tekniklerini nasıl kullanabiliriz?",
-    "readTime": 6,
-    "originalUrl": "#",
-    "image": "/images/default-blog-image.png"
-  }
-]
+{
+  "posts": [],
+  "lastUpdated": "2025-07-15T21:15:02.016Z",
+  "totalPosts": 0
+}
