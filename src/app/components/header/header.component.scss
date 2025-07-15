@@ -67,9 +67,24 @@ nav a {
 }
 
 .mobile-menu-open {
-  max-height: 400px;
+  max-height: 500px; // İletişim butonunun tam görünmesi için artırıldı
 }
 
 .mobile-menu-closed {
   max-height: 0;
+}
+
+// Mobile responsive improvements
+@media (max-width: 768px) {
+  .mobile-menu-open {
+    max-height: 600px; // Mobile'da daha fazla alan
+  }
+
+  // İletişim butonu mobile'da daha iyi görünüm için
+  .btn-zen {
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+  }
 }

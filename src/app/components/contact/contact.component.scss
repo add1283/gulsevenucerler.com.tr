@@ -20,3 +20,42 @@
   border-color: rgba(82, 192, 133, 0.5);
   box-shadow: 0 0 0 3px rgba(82, 192, 133, 0.1);
 }
+
+// Contact info icons mobile alignment fix
+.contact-info-item {
+  display: flex;
+  align-items: flex-start; // Mobile'da daha iyi hizalama için flex-start
+  gap: 1.5rem;
+
+  @media (min-width: 768px) {
+    align-items: center; // Desktop'ta center
+  }
+}
+
+.contact-icon-container {
+  flex-shrink: 0; // Icon container'ın küçülmesini önle
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    margin-top: 0.25rem; // Mobile'da hafif üst margin
+  }
+}
+
+.contact-info-text {
+  flex: 1;
+  min-width: 0; // Overflow için
+
+  h4 {
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+  }
+
+  p {
+    line-height: 1.5;
+    word-break: break-word; // Uzun email adresleri için
+  }
+}
