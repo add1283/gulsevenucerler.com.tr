@@ -52,14 +52,57 @@
             placeholder="Özel notlarınızı buraya yazabilirsiniz..."></textarea>
         </div>
 
+        <!-- Gmail HTML Mail Uyarısı -->
+        <div class="info-box">
+          <h3>🎨 HTML Mail Gönderimi</h3>
+          <p><strong>Gmail'de HTML görüntülemek için:</strong></p>
+          <ol>
+            <li>"HTML Kopyala" butonunu kullanın</li>
+            <li>Gmail'de "Rich formatting" modunda olduğunuzdan emin olun</li>
+            <li>Ctrl+V ile yapıştırın</li>
+          </ol>
+          <p><em>Not: "Gmail'de Aç" butonu sadece plain text gönderir.</em></p>
+        </div>
+
         <!-- Eylem Butonları -->
         <div class="action-buttons">
-          <button class="btn primary" (click)="sendToGmail()">
-            📧 Gmail'de Aç
+          <button class="btn primary" (click)="copyAsRichText()">
+            🎨 HTML Kopyala (Önerilen)
           </button>
-          <button class="btn secondary" (click)="copyToClipboard()">
-            📋 Kopyala
+          <button class="btn secondary" (click)="sendToGmail()">
+            📧 Gmail'de Aç (Plain Text)
           </button>
+          <button class="btn tertiary" (click)="copyToClipboard()">
+            📋 HTML Kodu Kopyala
+          </button>
+        </div>
+
+        <!-- HTML Mail Kullanım Rehberi -->
+        <div class="usage-guide">
+          <details>
+            <summary>📖 Gmail'de HTML Mail Nasıl Gönderilir?</summary>
+            <div class="guide-content">
+              <h4>Yöntem 1: Rich Text Kopyalama (Önerilen)</h4>
+              <ol>
+                <li>"HTML Kopyala" butonuna tıklayın</li>
+                <li>Gmail'de "Oluştur" butonuna tıklayın</li>
+                <li>Rich formatting modunda olduğunuzdan emin olun (A simgesi aktif)</li>
+                <li>Email alanına Ctrl+V ile yapıştırın</li>
+              </ol>
+
+              <h4>Yöntem 2: Tarayıcı Üzerinden</h4>
+              <ol>
+                <li>"HTML Kodu Kopyala" butonuna tıklayın</li>
+                <li>Kodu bir .html dosyasına kaydedin</li>
+                <li>Dosyayı tarayıcıda açın</li>
+                <li>Ctrl+A ile tümünü seçin, Ctrl+C ile kopyalayın</li>
+                <li>Gmail'de rich format modunda yapıştırın</li>
+              </ol>
+
+              <p><strong>💡 İpucu:</strong> Gmail'de rich formatting için email gövdesinin altındaki "A" simgesine
+                tıklayın.</p>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -76,8 +119,8 @@
 
     <!-- Alt Bilgi -->
     <div class="footer-info">
-      <p>💡 <strong>İpucu:</strong> Tüm alanları doldurduktan sonra "Gmail'de Aç" butonuna tıklayarak yanıtınızı
-        gönderebilirsiniz.</p>
+      <p>💡 <strong>İpucu:</strong> HTML formatında mail göndermek için "HTML Kopyala" butonunu kullanın ve Gmail'de
+        rich formatting modunda yapıştırın.</p>
     </div>
   </div>
 </div>

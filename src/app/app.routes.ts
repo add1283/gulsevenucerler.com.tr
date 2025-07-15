@@ -36,6 +36,10 @@ export const routes: Routes = [
     {
         path: 'reply',
         component: ReplyComponent,
-        title: 'Yanıt Hazırlayıcı - Gülseven Üçerler'
+        title: 'Yanıt Hazırlayıcı - Gülseven Üçerler',
+        data: {
+            excludeFromSitemap: true,
+            robots: 'noindex, nofollow'
+        }
     }
 ];
