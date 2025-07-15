@@ -8,9 +8,9 @@ on:
   # Manuel trigger için
   workflow_dispatch:
 
-  # Push'larda da çalışsın
-  push:
-    branches: [main]
+# GitHub Actions permissions
+permissions:
+  contents: write
 
 jobs:
   sync-blog:
@@ -47,7 +47,7 @@ jobs:
           # Sadece değişiklik varsa commit et
           if ! git diff --staged --exit-code; then
             git commit -m "auto: Update blog content from RSS feed [skip ci]"
-            git push
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
           else
             echo "No changes to commit"
           fi
