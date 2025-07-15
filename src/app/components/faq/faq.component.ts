@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 interface FAQ {
     id: number;
@@ -17,6 +17,11 @@ interface FAQ {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FaqComponent {
+    private isBrowser: boolean;
+
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+        this.isBrowser = isPlatformBrowser(this.platformId);
+    }
 
     faqs: FAQ[] = [
         {
@@ -59,5 +64,14 @@ export class FaqComponent {
 
     toggleFAQ(faq: FAQ) {
         faq.isOpen = !faq.isOpen;
+    }
+
+    scrollToSection(sectionId: string) {
+        if (this.isBrowser) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
     }
 }

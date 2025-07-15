@@ -67,14 +67,14 @@
         <p class="text-zen-600 mb-6">
           Daha fazla bilgi almak için benimle iletişime geçmekten çekinmeyin
         </p>
-        <a href="#contact"
-          class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:scale-105 group">
+        <button (click)="scrollToSection('contact')"
+          class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:scale-105 group cursor-pointer">
           <span>İletişime Geç</span>
           <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none"
             stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
           </svg>
-        </a>
+        </button>
       </div>
     </div>
   </div>
