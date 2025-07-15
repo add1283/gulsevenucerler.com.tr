@@ -6,10 +6,5 @@ export const routes: Routes = [
         path: 'reply',
         component: ReplyComponent,
         title: 'Yanıt Hazırlayıcı - Gülseven Üçerler'
-    },
-    {
-        path: '',
-        redirectTo: '',
-        pathMatch: 'full'
     }
 ];
