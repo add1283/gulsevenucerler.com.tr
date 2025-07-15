@@ -19,27 +19,42 @@
 
     <!-- Filter Buttons -->
     <div class="flex flex-wrap justify-center gap-4 mb-16 animate-slide-up">
-      <button *ngFor="let filter of ['all', 'reiki', 'accessbars', 'theta']" (click)="setFilter(filter)"
-        [class]="selectedFilter === filter ? 'filter-btn-active' : 'filter-btn'" class="filter-btn">
-        <span class="mr-2">{{ getCategoryName(filter) }}</span>
-        <span class="filter-count">{{ getCategoryCount(filter) }}</span>
+      <button (click)="filterCertificates('all')"
+        [class]="selectedFilter === 'all' ? 'filter-btn-active' : 'filter-btn'" class="filter-btn">
+        <span class="mr-2">{{ getCategoryName('all') }}</span>
+        <span class="filter-count">{{ categoryCounts.all }}</span>
+      </button>
+      <button (click)="filterCertificates('reiki')"
+        [class]="selectedFilter === 'reiki' ? 'filter-btn-active' : 'filter-btn'" class="filter-btn">
+        <span class="mr-2">{{ getCategoryName('reiki') }}</span>
+        <span class="filter-count">{{ categoryCounts.reiki }}</span>
+      </button>
+      <button (click)="filterCertificates('accessbars')"
+        [class]="selectedFilter === 'accessbars' ? 'filter-btn-active' : 'filter-btn'" class="filter-btn">
+        <span class="mr-2">{{ getCategoryName('accessbars') }}</span>
+        <span class="filter-count">{{ categoryCounts.accessbars }}</span>
+      </button>
+      <button (click)="filterCertificates('theta')"
+        [class]="selectedFilter === 'theta' ? 'filter-btn-active' : 'filter-btn'" class="filter-btn">
+        <span class="mr-2">{{ getCategoryName('theta') }}</span>
+        <span class="filter-count">{{ categoryCounts.theta }}</span>
       </button>
     </div>
 
     <!-- Certificates Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div *ngFor="let certificate of filteredCertificates; trackBy: trackByCertificate; let i = index"
-        class="certificate-card group cursor-pointer" [class.certificate-visible]="certificate.isVisible"
-        [attr.data-category]="certificate.category" [attr.data-certificate-id]="certificate.id"
-        [style.animation-delay.ms]="i * 100" (click)="openLightbox(certificate)">
+      <div *ngFor="let certificate of filteredCertificates; let i = index" class="certificate-card group cursor-pointer"
+        [class.certificate-visible]="certificate.isVisible" [attr.data-category]="certificate.category"
+        [attr.data-certificate-id]="certificate.id" [style.animation-delay.ms]="i * 100"
+        (click)="openLightbox(certificate)">
 
         <!-- Certificate Image/Icon -->
         <div class="certificate-image">
           <div class="certificate-icon-wrapper">
-            <!-- Lazy loaded image -->
-            <img *ngIf="certificate.imageUrl && certificate.isVisible" [src]="certificate.imageUrl"
-              [alt]="certificate.title" (error)="onImageError($event)" (load)="onImageLoad(certificate)"
-              class="certificate-img lazy-load" loading="lazy">
+            <!-- Certificate Image -->
+            <img *ngIf="getCertificateFileUrl(certificate) && certificate.isVisible"
+              [src]="getCertificateFileUrl(certificate)" [alt]="certificate.title" (error)="onImageError($event)"
+              (load)="onImageLoad(certificate)" class="certificate-img lazy-load" loading="lazy">
 
             <!-- Placeholder while loading -->
             <div *ngIf="!certificate.isVisible" class="image-placeholder">
@@ -47,11 +62,11 @@
             </div>
 
             <!-- Fallback emoji -->
-            <span class="certificate-icon" [class.hidden]="certificate.imageUrl && certificate.isVisible">
+            <span class="certificate-icon" [class.hidden]="getCertificateFileUrl(certificate) && certificate.isVisible">
               {{ certificate.image }}
             </span>
 
-            <div class="certificate-badge-corner">{{ certificate.year }}</div>
+
             <div class="view-overlay">
               <span class="view-text">🔍 Büyüt</span>
             </div>
@@ -80,25 +95,25 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
         <div class="stat-card animate-fade-in" style="animation-delay: 0.2s;">
           <div class="stat-icon">⚡</div>
-          <div class="stat-number">{{ getCategoryCount('reiki') }}</div>
+          <div class="stat-number">{{ categoryCounts.reiki }}</div>
           <div class="stat-label">Reiki Sertifikası</div>
         </div>
 
         <div class="stat-card animate-fade-in" style="animation-delay: 0.4s;">
           <div class="stat-icon">🔓</div>
-          <div class="stat-number">{{ getCategoryCount('accessbars') }}</div>
+          <div class="stat-number">{{ categoryCounts.accessbars }}</div>
           <div class="stat-label">AccessBars</div>
         </div>
 
         <div class="stat-card animate-fade-in" style="animation-delay: 0.6s;">
           <div class="stat-icon">🧠</div>
-          <div class="stat-number">{{ getCategoryCount('theta') }}</div>
+          <div class="stat-number">{{ categoryCounts.theta }}</div>
           <div class="stat-label">Theta Healing</div>
         </div>
 
         <div class="stat-card animate-fade-in" style="animation-delay: 0.8s;">
           <div class="stat-icon">📚</div>
-          <div class="stat-number">{{ getCategoryCount('all') }}</div>
+          <div class="stat-number">{{ categoryCounts.all }}</div>
           <div class="stat-label">Toplam Sertifika</div>
         </div>
       </div>
@@ -107,27 +122,46 @@
 </section>
 
 <!-- Lightbox Modal -->
-<div *ngIf="isLightboxOpen && selectedCertificate" class="lightbox-overlay" (click)="onLightboxClick($event)"
+<div *ngIf="isLightboxOpen && selectedCertificate" class="lightbox-overlay" (click)="closeLightbox()"
   (keydown)="onKeydown($event)" tabindex="0">
 
-  <div class="lightbox-container">
+  <div class="lightbox-container" (click)="$event.stopPropagation()">
     <button class="lightbox-close" (click)="closeLightbox()">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
     </button>
 
+    <!-- Navigation arrows -->
+    <button class="lightbox-nav lightbox-nav-prev" (click)="previousCertificate()"
+      *ngIf="filteredCertificates.length > 1">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <button class="lightbox-nav lightbox-nav-next" (click)="nextCertificate()" *ngIf="filteredCertificates.length > 1">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+
     <div class="lightbox-content">
       <div class="lightbox-image">
-        <img *ngIf="selectedCertificate.imageUrl" [src]="selectedCertificate.imageUrl" [alt]="selectedCertificate.title"
-          (error)="onImageError($event)" class="max-w-full max-h-full object-contain">
-        <div *ngIf="!selectedCertificate.imageUrl" class="fallback-icon">
+        <!-- Certificate Image -->
+        <img *ngIf="getCertificateFileUrl(selectedCertificate)" [src]="getCertificateFileUrl(selectedCertificate)"
+          [alt]="selectedCertificate.title" (error)="onImageError($event)" class="max-w-full max-h-full object-contain">
+
+        <!-- Fallback for certificates without file URLs -->
+        <div *ngIf="!getCertificateFileUrl(selectedCertificate)" class="fallback-icon">
           <span class="text-8xl">{{ selectedCertificate.image }}</span>
+          <p class="text-zen-600 mt-4">Sertifika dosyası bulunamadı</p>
         </div>
       </div>
 
       <div class="lightbox-info">
         <div class="certificate-category">{{ getCategoryName(selectedCertificate.category) }}</div>
+
         <h2 class="lightbox-title">{{ selectedCertificate.title }}</h2>
         <p class="lightbox-description">{{ selectedCertificate.description }}</p>
 
