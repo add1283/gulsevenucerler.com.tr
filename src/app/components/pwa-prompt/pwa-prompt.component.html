@@ -1,0 +1,74 @@
+<!-- PWA Install Prompt -->
+<div *ngIf="showInstallPrompt" class="pwa-prompt-overlay" (click)="dismissPrompt()">
+  <div class="pwa-prompt-container" (click)="$event.stopPropagation()">
+    <div class="pwa-prompt-header">
+      <div class="pwa-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+      </div>
+      <button class="pwa-close-btn" (click)="dismissPrompt()" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="pwa-prompt-content">
+      <h3>📱 Uygulamayı Yükle</h3>
+      <p>
+        <strong>Gülseven Üçerler</strong> uygulamasını telefonunuza kurun ve
+        hızlı erişim sağlayın!
+      </p>
+
+      <div class="pwa-benefits">
+        <div class="benefit-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span>Hızlı açılış</span>
+        </div>
+
+        <div class="benefit-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
+          </svg>
+          <span>Çevrimdışı erişim</span>
+        </div>
+
+        <div class="benefit-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 17h5l-5 5v-5zM4.5 5.653c0-1.5 1.5-3 3-3s3 1.5 3 3-1.5 3-3 3-3-1.5-3-3z" />
+          </svg>
+          <span>Ana ekran kısayolu</span>
+        </div>
+      </div>
+
+      <div class="pwa-shortcuts">
+        <h4>🚀 Hızlı Erişim:</h4>
+        <div class="shortcut-items">
+          <div class="shortcut-item">
+            <span class="shortcut-icon">🔮</span>
+            <span>Hizmetlerim</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-icon">📅</span>
+            <span>Randevu Al</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pwa-prompt-actions">
+      <button class="pwa-btn pwa-btn-secondary" (click)="dismissPrompt()">
+        Daha Sonra
+      </button>
+      <button class="pwa-btn pwa-btn-primary" (click)="installApp()">
+        Şimdi Yükle
+      </button>
+    </div>
+  </div>
+</div>

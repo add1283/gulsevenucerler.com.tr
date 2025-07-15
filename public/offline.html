@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Çevrimdışı - Gülseven Üçerler</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #52c085 0%, #a8e6cf 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2d3748;
+    }
+
+    .offline-container {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      max-width: 500px;
+      margin: 2rem;
+    }
+
+    .offline-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(135deg, #52c085, #369b5f);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+    }
+
+    .offline-icon svg {
+      width: 60px;
+      height: 60px;
+      color: white;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #4a5568;
+    }
+
+    .retry-btn {
+      background: linear-gradient(135deg, #52c085, #369b5f);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0.5rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .retry-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(82, 192, 133, 0.3);
+    }
+
+    .contact-info {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .contact-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0.5rem 0;
+      color: #4a5568;
+    }
+
+    .contact-item svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+      color: #52c085;
+    }
+
+    @media (max-width: 640px) {
+      .offline-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .offline-icon {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+        </path>
+      </svg>
+    </div>
+
+    <h1>İnternet Bağlantısı Yok</h1>
+
+    <p>
+      Şu anda çevrimdışısınız. İnternet bağlantınızı kontrol edin ve tekrar deneyin.
+      Acil durumlarda aşağıdaki iletişim bilgilerini kullanabilirsiniz.
+    </p>
+
+    <button class="retry-btn" onclick="location.reload()">
+      Tekrar Dene
+    </button>
+
+    <a href="/" class="retry-btn">
+      Ana Sayfaya Dön
+    </a>
+
+    <div class="contact-info">
+      <h3>Acil İletişim</h3>
+
+      <div class="contact-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+          </path>
+        </svg>
+        info@gulsevenucerler.com
+      </div>
+
+      <div class="contact-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+          </path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z">
+          </path>
+        </svg>
+        Bademler, İzmir
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Online duruma geçince otomatik yenile
+    window.addEventListener('online', function () {
+      location.reload();
+    });
+
+    // Klavye kısayolları
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'R' || e.key === 'r') {
+        location.reload();
+      }
+      if (e.key === 'H' || e.key === 'h') {
+        location.href = '/';
+      }
+    });
+
+  </script>
+</body>
+
+</html>
