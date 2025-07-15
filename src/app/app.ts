@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
@@ -22,9 +22,11 @@ import { PwaPromptComponent } from './components/pwa-prompt/pwa-prompt.component
 export class AppComponent implements OnInit {
   title = 'gulsevenucerler.com.tr';
   private isBrowser: boolean;
+  showMainContent = true;
 
   constructor(
     private cdr: ChangeDetectorRef,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -34,6 +36,13 @@ export class AppComponent implements OnInit {
     // Hızlı başlatma - loading yok
     if (this.isBrowser) {
       this.registerServiceWorker();
+
+      // Router navigation'ı dinle
+      this.router.events.subscribe(() => {
+        this.showMainContent = this.router.url === '' || this.router.url === '/';
+        this.cdr.markForCheck();
+      });
+
       this.cdr.markForCheck();
     }
   }

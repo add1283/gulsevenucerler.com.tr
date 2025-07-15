@@ -1,0 +1,83 @@
+<div class="reply-container">
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo-circle">
+        <span>G</span>
+      </div>
+      <h1>Yanıt Hazırlayıcı</h1>
+      <p>Profesyonel Email Şablonu Oluşturucu</p>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content">
+      <!-- Sol Taraf - Kontroller -->
+      <div class="controls-section">
+        <h2>📝 Email Detayları</h2>
+
+        <div class="form-group">
+          <label for="customerEmail">Müşteri E-posta</label>
+          <input type="email" id="customerEmail" [(ngModel)]="customerEmail" (input)="onFieldChange()"
+            placeholder="ornek@email.com">
+        </div>
+
+        <div class="form-group">
+          <label for="customerName">Müşteri Adı</label>
+          <input type="text" id="customerName" [(ngModel)]="customerName" (input)="onFieldChange()"
+            placeholder="Müşteri adını girin">
+        </div>
+
+        <div class="form-group">
+          <label for="serviceType">Hizmet Türü</label>
+          <select id="serviceType" [(ngModel)]="serviceType" (change)="onFieldChange()">
+            <option *ngFor="let service of serviceOptions" [value]="service">
+              {{service}}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="appointmentDate">Randevu Tarihi (İsteğe bağlı)</label>
+          <input type="date" id="appointmentDate" [(ngModel)]="appointmentDate" (input)="onFieldChange()">
+        </div>
+
+        <div class="form-group">
+          <label for="appointmentTime">Randevu Saati (İsteğe bağlı)</label>
+          <input type="time" id="appointmentTime" [(ngModel)]="appointmentTime" (input)="onFieldChange()">
+        </div>
+
+        <div class="form-group">
+          <label for="additionalMessage">Ek Mesaj (İsteğe bağlı)</label>
+          <textarea id="additionalMessage" [(ngModel)]="additionalMessage" (input)="onFieldChange()" rows="4"
+            placeholder="Özel notlarınızı buraya yazabilirsiniz..."></textarea>
+        </div>
+
+        <!-- Eylem Butonları -->
+        <div class="action-buttons">
+          <button class="btn primary" (click)="sendToGmail()">
+            📧 Gmail'de Aç
+          </button>
+          <button class="btn secondary" (click)="copyToClipboard()">
+            📋 Kopyala
+          </button>
+        </div>
+      </div>
+
+      <!-- Sağ Taraf - Önizleme -->
+      <div class="preview-section">
+        <h2>👁️ Email Önizlemesi</h2>
+        <div class="email-preview">
+          <div id="emailPreview">
+            <!-- Email önizlemesi buraya dinamik olarak yüklenecek -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alt Bilgi -->
+    <div class="footer-info">
+      <p>💡 <strong>İpucu:</strong> Tüm alanları doldurduktan sonra "Gmail'de Aç" butonuna tıklayarak yanıtınızı
+        gönderebilirsiniz.</p>
+    </div>
+  </div>
+</div>

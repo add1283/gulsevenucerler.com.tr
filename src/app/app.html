@@ -1,5 +1,5 @@
-<!-- Main Content -->
-<div class="main-content fade-in">
+<!-- Main Content - Sadece ana sayfada göster -->
+<div class="main-content fade-in" *ngIf="showMainContent">
   <app-header></app-header>
   <main>
     <app-home></app-home>
@@ -15,4 +15,5 @@
 <!-- PWA Install Prompt -->
 <app-pwa-prompt></app-pwa-prompt>
 
+<!-- Router Outlet - Özel sayfalar için -->
 <router-outlet></router-outlet>

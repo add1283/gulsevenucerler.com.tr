@@ -43,3 +43,6 @@ Thumbs.db
 
 # Gmail Templates (Private business templates)
 gmail-templates/
+
+# EmailJS Improvements (Private email templates)
+emailjs-improvements/
