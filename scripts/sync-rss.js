@@ -65,7 +65,8 @@ function parseRSSContent(rssText) {
       slug,
       excerpt,
       content: cleanDescription,
-      originalUrl: link,
+                      originalUrl: link,
+                image: '/images/default-blog-image.png',
       publishedAt: publishDate.toISOString(),
       publishedDate: publishDate.toLocaleDateString('tr-TR'),
       readTime: Math.max(1, Math.ceil(cleanDescription.split(' ').length / 200)) // ortalama okuma süresi

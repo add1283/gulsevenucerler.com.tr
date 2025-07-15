@@ -11,6 +11,7 @@ interface BlogPost {
     publishedDate: string;
     readTime: number;
     originalUrl: string;
+    image?: string;
 }
 
 interface BlogData {

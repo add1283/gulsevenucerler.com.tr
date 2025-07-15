@@ -63,6 +63,15 @@
         <p class="text-xl text-zen-600 leading-relaxed max-w-2xl mx-auto">
           {{ post.excerpt }}
         </p>
+
+        <!-- Featured Image -->
+        <div class="mt-12 mb-8">
+          <div class="relative rounded-2xl overflow-hidden shadow-xl max-w-4xl mx-auto">
+            <img [src]="post.image || '/images/default-blog-image.png'" [alt]="post.title"
+              class="w-full h-64 md:h-80 lg:h-96 object-cover" loading="eager" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          </div>
+        </div>
       </header>
 
       <!-- Post Content -->
