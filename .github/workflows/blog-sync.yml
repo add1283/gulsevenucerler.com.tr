@@ -1,0 +1,62 @@
+name: Blog RSS Sync
+
+on:
+  schedule:
+    # Her saat başı RSS kontrol et
+    - cron: "0 * * * *"
+
+  # Manuel trigger için
+  workflow_dispatch:
+
+  # Push'larda da çalışsın
+  push:
+    branches: [main]
+
+jobs:
+  sync-blog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Sync RSS and Generate Blog Data
+        run: node scripts/sync-rss.js
+        env:
+          # Blogspot RSS URL (kullanıcı tarafından ayarlanacak)
+          RSS_URL: ${{ secrets.BLOGSPOT_RSS_URL || 'https://gulsevenucerler.blogspot.com/feeds/posts/default?alt=rss' }}
+
+      - name: Build Site
+        run: npm run build
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+
+          # Sadece değişiklik varsa commit et
+          if ! git diff --staged --exit-code; then
+            git commit -m "auto: Update blog content from RSS feed [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/gulsevenucerler.com.tr
