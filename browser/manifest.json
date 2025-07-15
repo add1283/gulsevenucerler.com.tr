@@ -1,0 +1,105 @@
+{
+  "name": "Gülseven Üçerler - Enerji Şifa Uzmanı",
+  "short_name": "Gülseven Üçerler",
+  "description": "Teta Healing, Reiki ve AccessBars ile enerji şifacılığı hizmetleri. İç huzurunuzu keşfedin.",
+  "theme_color": "#52c085",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/?utm_source=pwa&utm_medium=homescreen",
+  "categories": ["health", "lifestyle", "wellness"],
+  "lang": "tr",
+  "icons": [
+    {
+      "src": "images/icon-72x72.svg",
+      "sizes": "72x72",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "images/icon-96x96.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "images/icon-128x128.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "images/icon-144x144.svg",
+      "sizes": "144x144",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "images/icon-152x152.svg",
+      "sizes": "152x152",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "images/icon-192x192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "images/icon-384x384.svg",
+      "sizes": "384x384",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "images/icon-512x512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Hizmetlerim",
+      "short_name": "Hizmetler",
+      "description": "Şifa hizmetlerimi görüntüle",
+      "url": "/#services",
+      "icons": [
+        {
+          "src": "images/icon-96x96.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Randevu Al",
+      "short_name": "Randevu",
+      "description": "Hemen randevu oluştur",
+      "url": "/#contact",
+      "icons": [
+        {
+          "src": "images/icon-96x96.svg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/screenshot-desktop.svg",
+      "sizes": "1920x1080",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "Ana sayfa masaüstü görünümü"
+    },
+    {
+      "src": "images/screenshot-mobile.svg",
+      "sizes": "360x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "Ana sayfa mobil görünümü"
+    }
+  ]
+}

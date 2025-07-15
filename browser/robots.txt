@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gulsevenucerler.com.tr/sitemap.xml
+
+# Disallow admin or unnecessary paths
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*.xml$
+Allow: /sitemap.xml
