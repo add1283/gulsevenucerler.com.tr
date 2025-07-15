@@ -27,3 +27,12 @@
     transform: translateY(0);
   }
 }
+
+// Debug cards - scroll protection
+.fixed-card {
+  position: relative !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 100px;
+}

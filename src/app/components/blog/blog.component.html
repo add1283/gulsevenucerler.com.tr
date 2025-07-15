@@ -21,29 +21,13 @@
       </p>
     </div>
 
-    <!-- Loading State -->
-    <div *ngIf="loading" class="text-center py-16">
-      <div class="inline-flex items-center space-x-2">
-        <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
-        <span class="text-zen-600 font-medium">Blog yazıları yükleniyor...</span>
-      </div>
-    </div>
-
-    <!-- Error State -->
-    <div *ngIf="error && !loading" class="text-center py-16">
-      <div class="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md mx-auto">
-        <div class="text-red-500 text-4xl mb-4">⚠️</div>
-        <h3 class="text-lg font-semibold text-red-800 mb-2">Blog Yazıları Yüklenemedi</h3>
-        <p class="text-red-600">Lütfen daha sonra tekrar deneyin.</p>
-      </div>
-    </div>
-
     <!-- Blog Posts Grid -->
-    <div *ngIf="!loading && !error" class="space-y-12">
+    <div class="space-y-12">
 
       <!-- Posts Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" *ngIf="paginatedPosts.length > 0">
-        <article *ngFor="let post of paginatedPosts; let i = index" class="blog-card group cursor-pointer"
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <article *ngFor="let post of posts; let i = index" class="blog-card group cursor-pointer"
           [style.animation-delay.ms]="i * 100" (click)="goToPost(post)">
 
           <!-- Card Content -->
@@ -114,7 +98,7 @@
       </div>
 
       <!-- No Posts Message -->
-      <div *ngIf="paginatedPosts.length === 0" class="text-center py-16">
+      <div *ngIf="posts.length === 0" class="text-center py-16">
         <div class="text-6xl mb-4">📝</div>
         <h3 class="text-2xl font-lora font-bold text-zen-800 mb-4">Henüz Blog Yazısı Yok</h3>
         <p class="text-zen-600 max-w-md mx-auto">
@@ -122,32 +106,43 @@
         </p>
       </div>
 
-      <!-- Pagination -->
-      <div *ngIf="totalPages > 1" class="flex justify-center mt-16">
-        <nav class="flex items-center space-x-2">
-          <!-- Previous Button -->
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1"
-            class="px-4 py-2 bg-white/80 backdrop-blur-lg border border-white/20 rounded-xl text-zen-600 transition-all duration-300 hover:bg-white hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-          </button>
+    </div>
+  </div>
+</section>
 
-          <!-- Page Numbers -->
-          <button *ngFor="let page of pageNumbers" (click)="goToPage(page)"
-            [class]="page === currentPage ? 'bg-primary-600 text-white' : 'bg-white/80 text-zen-600 hover:bg-white hover:text-primary-600'"
-            class="px-4 py-2 backdrop-blur-lg border border-white/20 rounded-xl transition-all duration-300 font-medium min-w-[2.5rem]">
-            {{ page }}
-          </button>
+<!-- BlogSpot Redirect Button -->
+<section class="py-20 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-secondary-50/30"></div>
+  <div class="absolute top-0 left-0 w-64 h-64 bg-primary-100/30 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary-100/20 rounded-full blur-3xl"></div>
 
-          <!-- Next Button -->
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages"
-            class="px-4 py-2 bg-white/80 backdrop-blur-lg border border-white/20 rounded-xl text-zen-600 transition-all duration-300 hover:bg-white hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
-          </button>
-        </nav>
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="bg-white/80 backdrop-blur-lg border border-white/20 rounded-3xl p-12 shadow-xl">
+        <div class="text-6xl mb-6">📚</div>
+        <h2 class="text-3xl font-bold text-zen-800 mb-4">Daha Fazla İçerik</h2>
+        <p class="text-zen-600 text-lg mb-8 leading-relaxed">
+          Enerji iyileştirme, kişisel gelişim ve ruhsal büyüme hakkında daha fazla yazı ve güncellemeler için
+          ana blog sayfamızı ziyaret edebilirsiniz.
+        </p>
+
+        <button onclick="window.open('#', '_blank')"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 hover:from-primary-700 hover:to-primary-800 hover:shadow-xl hover:scale-105 transform">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
+            </path>
+          </svg>
+          <span>Ana Blog'a Git</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+        </button>
+
+        <div class="mt-6 text-sm text-zen-500">
+          * Ana blog sayfamıza yönlendirileceksiniz
+        </div>
       </div>
     </div>
   </div>

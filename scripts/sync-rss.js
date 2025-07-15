@@ -120,15 +120,14 @@ async function main() {
     console.log(`📄 Parsed ${posts.length} blog posts`);
 
     // Blog data dosyasını oluştur
-    const blogDataPath = path.join(__dirname, '../public/blog-data.json');
-    const blogData = {
-      posts,
-      lastUpdated: new Date().toISOString(),
-      totalPosts: posts.length
-    };
+    const publicBlogDataPath = path.join(__dirname, '../public/blog-data.json');
+    const assetsBlogDataPath = path.join(__dirname, '../src/assets/blog-data.json');
 
-    fs.writeFileSync(blogDataPath, JSON.stringify(blogData, null, 2));
-    console.log('✅ Blog data saved to public/blog-data.json');
+    // Component'ler direkt array bekliyor, wrapper object değil
+    fs.writeFileSync(publicBlogDataPath, JSON.stringify(posts, null, 2));
+    fs.writeFileSync(assetsBlogDataPath, JSON.stringify(posts, null, 2));
+
+    console.log('✅ Blog data saved to public/blog-data.json and src/assets/blog-data.json');
 
     // Sitemap'i güncelle
     updateSitemap(posts);

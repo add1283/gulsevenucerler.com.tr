@@ -1,14 +1,12 @@
-const CACHE_NAME = 'gulsevenucerler-v1';
+const CACHE_NAME = 'gulsevenucerler-v2';
 const OFFLINE_URL = '/offline.html';
 
-// Cache edilecek dosyalar
+// Cache edilecek dosyalar - daha generic yap
 const urlsToCache = [
   '/',
   '/offline.html',
-  '/styles.css',
-  '/main.js',
-  '/polyfills.js',
   '/favicon.ico',
+  '/manifest.json',
   'https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Nunito:wght@300;400;500;600;700&display=swap'
 ];
 
@@ -24,6 +22,9 @@ self.addEventListener('install', (event) => {
       })
       .then(() => {
         return self.skipWaiting();
+      })
+      .catch((error) => {
+        console.log('[SW] Cache oluşturma hatası:', error);
       })
   );
 });
@@ -48,7 +49,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Network istekleri yakalama
+// Network istekleri yakalama - daha robust
 self.addEventListener('fetch', (event) => {
   // Sadece GET isteklerini handle et
   if (event.request.method !== 'GET') return;
@@ -56,15 +57,22 @@ self.addEventListener('fetch', (event) => {
   // Chrome extension isteklerini ignore et
   if (event.request.url.startsWith('chrome-extension://')) return;
 
+  // Analytics isteklerini ignore et
+  if (event.request.url.includes('google-analytics.com') ||
+      event.request.url.includes('googletagmanager.com')) return;
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
         // Başarılı response'u cache'le
-        if (response.status === 200) {
+        if (response.status === 200 && response.type === 'basic') {
           const responseClone = response.clone();
           caches.open(CACHE_NAME)
             .then((cache) => {
-              cache.put(event.request, responseClone);
+              // Sadece same-origin istekleri cache'le
+              if (event.request.url.startsWith(self.location.origin)) {
+                cache.put(event.request, responseClone);
+              }
             });
         }
         return response;
@@ -80,6 +88,7 @@ self.addEventListener('fetch', (event) => {
             // Eğer sayfa isteği ise offline sayfasını göster
             if (event.request.mode === 'navigate' ||
                 (event.request.method === 'GET' &&
+                 event.request.headers.get('accept') &&
                  event.request.headers.get('accept').includes('text/html'))) {
               return caches.match(OFFLINE_URL);
             }
@@ -170,3 +179,12 @@ self.addEventListener('notificationclick', (event) => {
     );
   }
 });
+
+// Dummy functions for IndexedDB operations (if not implemented elsewhere)
+async function getOfflineRequests() {
+  return [];
+}
+
+async function deleteOfflineRequest(id) {
+  // Implement if needed
+}

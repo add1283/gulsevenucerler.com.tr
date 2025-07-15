@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { NgZone } from '@angular/core';
 
 interface BlogPost {
     id: string;
@@ -26,8 +27,6 @@ interface BlogPost {
 })
 export class AmpBlogComponent implements OnInit {
     post: BlogPost | null = null;
-    loading = true;
-    error = false;
     currentYear = new Date().getFullYear();
     private isBrowser: boolean;
 
@@ -36,6 +35,8 @@ export class AmpBlogComponent implements OnInit {
         private router: Router,
         private meta: Meta,
         private titleService: Title,
+        private ngZone: NgZone,
+        private cdr: ChangeDetectorRef,
         @Inject(PLATFORM_ID) private platformId: Object,
         @Inject(DOCUMENT) private document: Document
     ) {
@@ -52,32 +53,26 @@ export class AmpBlogComponent implements OnInit {
 
     async loadBlogPost(slug: string) {
         try {
-            if (!this.isBrowser) return;
-
-            const response = await fetch('/blog-data.json');
-            if (!response.ok) throw new Error('Blog data not found');
-
-            const blogPosts: BlogPost[] = await response.json();
-
-            // Slug'a göre post bul
-            this.post = blogPosts.find(p => p.slug === slug) || null;
-
-            if (!this.post) {
-                this.error = true;
-                this.loading = false;
+            if (!this.isBrowser) {
                 return;
             }
 
-            // SEO ve structured data güncellemeleri
-            this.updateAmpSEO();
-            this.addAmpStructuredData();
+            const response = await fetch('/assets/blog-data.json');
+            if (!response.ok) throw new Error('Blog data not found');
 
-            this.loading = false;
+            const blogPosts: BlogPost[] = await response.json();
+            this.post = blogPosts.find(p => p.slug === slug) || null;
+
+            if (this.post) {
+                this.updateAmpSEO();
+                this.addAmpStructuredData();
+            }
+
+            // Change detection'ı manuel trigger et
+            this.cdr.markForCheck();
 
         } catch (error) {
             console.error('Error loading blog post:', error);
-            this.error = true;
-            this.loading = false;
         }
     }
 
@@ -120,53 +115,182 @@ export class AmpBlogComponent implements OnInit {
             existingScript.remove();
         }
 
-        const structuredData = {
+        // AMP Article structured data
+        const ampArticleStructuredData = {
             "@context": "https://schema.org",
             "@type": "Article",
             "headline": this.post.title,
             "description": this.post.excerpt,
-            "image": {
-                "@type": "ImageObject",
-                "url": `https://gulsevenucerler.com.tr${this.post.image}`,
-                "width": 1200,
-                "height": 630
-            },
+            "image": [
+                {
+                    "@type": "ImageObject",
+                    "url": `https://gulsevenucerler.com.tr${this.post.image}`,
+                    "width": 1200,
+                    "height": 630
+                },
+                {
+                    "@type": "ImageObject",
+                    "url": `https://gulsevenucerler.com.tr${this.post.image}`,
+                    "width": 800,
+                    "height": 600
+                },
+                {
+                    "@type": "ImageObject",
+                    "url": `https://gulsevenucerler.com.tr${this.post.image}`,
+                    "width": 400,
+                    "height": 300
+                }
+            ],
             "datePublished": this.post.publishedAt,
             "dateModified": this.post.publishedAt,
             "author": {
                 "@type": "Person",
                 "name": "Gülseven Üçerler",
                 "url": "https://gulsevenucerler.com.tr",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://gulsevenucerler.com.tr/images/profile-picture.jpg",
+                    "width": 400,
+                    "height": 400
+                },
+                "jobTitle": "Enerji Şifacılığı Uzmanı",
+                "worksFor": {
+                    "@type": "Organization",
+                    "name": "Gülseven Üçerler"
+                },
                 "sameAs": [
-                    "https://www.linkedin.com/in/gulsevenucerler"
+                    "https://www.linkedin.com/in/gulsevenucerler",
+                    "https://gulsevenucerler.com.tr"
                 ]
             },
             "publisher": {
                 "@type": "Organization",
                 "name": "Gülseven Üçerler",
+                "url": "https://gulsevenucerler.com.tr",
                 "logo": {
                     "@type": "ImageObject",
                     "url": "https://gulsevenucerler.com.tr/images/social-image.png",
                     "width": 1200,
                     "height": 630
-                }
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "TR",
+                    "addressLocality": "İstanbul"
+                },
+                "sameAs": [
+                    "https://www.linkedin.com/in/gulsevenucerler"
+                ]
             },
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": `https://gulsevenucerler.com.tr/amp/${this.post.slug}`
             },
             "articleSection": "Enerji Şifacılığı",
-            "keywords": ["theta healing", "reiki", "enerji şifacılığı", "kişisel gelişim", "meditasyon", "amp"],
+            "keywords": ["theta healing", "reiki", "enerji şifacılığı", "kişisel gelişim", "meditasyon", "amp", "accessbars"],
             "wordCount": this.post.content.split(' ').length,
             "timeRequired": `PT${this.post.readTime}M`,
             "isAccessibleForFree": true,
-            "url": `https://gulsevenucerler.com.tr/amp/${this.post.slug}`
+            "inLanguage": "tr-TR",
+            "url": `https://gulsevenucerler.com.tr/amp/${this.post.slug}`,
+            "potentialAction": {
+                "@type": "ReadAction",
+                "target": `https://gulsevenucerler.com.tr/amp/${this.post.slug}`
+            },
+            "speakable": {
+                "@type": "SpeakableSpecification",
+                "cssSelector": [".amp-article h1", ".amp-article h2", ".amp-article p"]
+            },
+            // AMP-specific properties
+            "ampVersion": "1.0",
+            "alternativeHeadline": this.post.excerpt,
+            "about": {
+                "@type": "Thing",
+                "name": "Enerji Şifacılığı",
+                "description": "Theta Healing, Reiki ve AccessBars ile enerji iyileştirme teknikleri"
+            }
+        };
+
+        // AMP BreadcrumbList structured data
+        const ampBreadcrumbStructuredData = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Ana Sayfa",
+                    "item": "https://gulsevenucerler.com.tr"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://gulsevenucerler.com.tr/blog"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": this.post.title,
+                    "item": `https://gulsevenucerler.com.tr/amp/${this.post.slug}`
+                }
+            ]
+        };
+
+        // AMP Website structured data
+        const ampWebsiteStructuredData = {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Gülseven Üçerler (AMP)",
+            "url": "https://gulsevenucerler.com.tr",
+            "description": "Enerji şifacılığı, Teta Healing, Reiki ve AccessBars ile şifa hizmetleri - Hızlı AMP sürümü",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://gulsevenucerler.com.tr/blog?search={search_term_string}",
+                "query-input": "required name=search_term_string"
+            },
+            "sameAs": [
+                "https://www.linkedin.com/in/gulsevenucerler"
+            ]
+        };
+
+        // Organization structured data
+        const organizationStructuredData = {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Gülseven Üçerler",
+            "url": "https://gulsevenucerler.com.tr",
+            "logo": "https://gulsevenucerler.com.tr/images/social-image.png",
+            "description": "Profesyonel enerji şifacılığı hizmetleri",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "TR",
+                "addressLocality": "İstanbul"
+            },
+            "founder": {
+                "@type": "Person",
+                "name": "Gülseven Üçerler"
+            },
+            "sameAs": [
+                "https://www.linkedin.com/in/gulsevenucerler"
+            ]
+        };
+
+        // Combine all AMP structured data
+        const combinedAmpStructuredData = {
+            "@context": "https://schema.org",
+            "@graph": [
+                ampArticleStructuredData,
+                ampBreadcrumbStructuredData,
+                ampWebsiteStructuredData,
+                organizationStructuredData
+            ]
         };
 
         const script = this.document.createElement('script');
         script.type = 'application/ld+json';
         script.id = 'amp-structured-data';
-        script.textContent = JSON.stringify(structuredData);
+        script.textContent = JSON.stringify(combinedAmpStructuredData);
         this.document.head.appendChild(script);
     }
 }

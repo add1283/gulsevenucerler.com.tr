@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
@@ -23,7 +23,7 @@ import { PwaPromptComponent } from './components/pwa-prompt/pwa-prompt.component
 export class AppComponent implements OnInit {
   title = 'gulsevenucerler.com.tr';
   private isBrowser: boolean;
-  showMainContent = true;
+  showMainContent = true; // Başlangıçta true yap - flashing'i önlemek için
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -31,21 +31,38 @@ export class AppComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+
+    // İlk URL kontrolü
+    if (this.isBrowser) {
+      const currentUrl = this.router.url;
+      this.showMainContent = this.isHomePage(currentUrl);
+    }
   }
 
   ngOnInit() {
-    // Hızlı başlatma - loading yok
     if (this.isBrowser) {
       this.registerServiceWorker();
 
-      // Router navigation'ı dinle
-      this.router.events.subscribe(() => {
-        this.showMainContent = this.router.url === '' || this.router.url === '/';
-        this.cdr.markForCheck();
+      // Sadece NavigationEnd event'lerini dinle - daha stabil
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          const newUrl = event.url;
+          const shouldShowMain = this.isHomePage(newUrl);
+          this.showMainContent = shouldShowMain;
+          this.cdr.markForCheck();
+        }
       });
 
       this.cdr.markForCheck();
     }
+  }
+
+  private isHomePage(url: string): boolean {
+    return url === '' || url === '/' || url === '/index.html';
+  }
+
+  getCurrentUrl(): string {
+    return this.isBrowser ? window.location.href : 'SSR';
   }
 
   private registerServiceWorker() {
