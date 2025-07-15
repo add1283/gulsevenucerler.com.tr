@@ -1,0 +1,81 @@
+<!-- FAQ Section -->
+<section id="faq" class="py-24 bg-gradient-to-br from-primary-50 to-secondary-50 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-64 h-64 bg-accent-100/30 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 left-0 w-96 h-96 bg-primary-100/20 rounded-full blur-3xl"></div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="text-center mb-20 animate-fade-in">
+      <span
+        class="inline-block px-6 py-3 bg-primary-100/80 text-primary-700 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-primary-200/50">
+        ❓ Sık Sorulan Sorular
+      </span>
+      <h2 class="text-4xl md:text-5xl font-lora font-bold text-zen-800 mb-6">
+        Merak <span class="text-gradient">Edilenler</span>
+      </h2>
+      <p class="text-xl text-zen-600 max-w-3xl mx-auto leading-relaxed">
+        Enerji şifacılığı hakkında en çok sorulan soruların yanıtlarını buradan öğrenebilirsiniz
+      </p>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="max-w-4xl mx-auto">
+      <div class="space-y-4">
+        <div *ngFor="let faq of faqs; let i = index" class="faq-item" [class.faq-open]="faq.isOpen"
+          [style.animation-delay.ms]="i * 100">
+
+          <!-- Question Button -->
+          <button (click)="toggleFAQ(faq)"
+            class="faq-question w-full text-left p-6 bg-white/80 backdrop-blur-lg border border-white/20 rounded-2xl transition-all duration-300 hover:bg-white/90 hover:border-primary-200/50 hover:shadow-lg group">
+
+            <div class="flex items-center justify-between">
+              <h3
+                class="text-lg font-semibold text-zen-800 pr-4 group-hover:text-primary-700 transition-colors duration-300">
+                {{ faq.question }}
+              </h3>
+              <div
+                class="faq-icon flex-shrink-0 w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-primary-200">
+                <svg class="w-5 h-5 text-primary-600 transition-transform duration-300" [class.rotate-45]="faq.isOpen"
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                  </path>
+                </svg>
+              </div>
+            </div>
+          </button>
+
+          <!-- Answer Panel -->
+          <div class="faq-answer overflow-hidden transition-all duration-500" [class.faq-answer-open]="faq.isOpen">
+            <div class="p-6 pt-0">
+              <div
+                class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl p-6 border-l-4 border-primary-300">
+                <p class="text-zen-700 leading-relaxed text-base">
+                  {{ faq.answer }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-16">
+      <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 max-w-2xl mx-auto border border-white/20 shadow-lg">
+        <h3 class="text-2xl font-lora font-bold text-zen-800 mb-4">
+          Başka sorularınız mı var?
+        </h3>
+        <p class="text-zen-600 mb-6">
+          Daha fazla bilgi almak için benimle iletişime geçmekten çekinmeyin
+        </p>
+        <a href="#contact"
+          class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:scale-105 group">
+          <span>İletişime Geç</span>
+          <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,9 +1,8 @@
-// Filter Buttons
 .filter-btn {
   display: inline-flex;
   align-items: center;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 2rem;
@@ -20,7 +19,7 @@
 }
 
 .filter-btn-active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   border-color: #059669;
   box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
@@ -42,9 +41,8 @@
   text-align: center;
 }
 
-// Certificate Cards with Lazy Loading
 .certificate-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 1.5rem;
@@ -81,29 +79,24 @@
     opacity: 1;
     transform: translateY(0);
   }
-
-  &.certificate-animate-in {
-    animation: certificateSlideIn 0.8s ease forwards;
-  }
 }
 
-// Image Loading States
 .certificate-image {
   position: relative;
-  padding: 1rem; // Padding azaltıldı
+  padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  min-height: 280px; // Yükseklik arttırıldı
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  min-height: 280px;
 }
 
 .certificate-icon-wrapper {
   position: relative;
-  width: 100%; // Tam genişlik
-  height: 100%; // Tam yükseklik
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
-  border-radius: 10px; // Dikdörtgen
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,7 +105,7 @@
   overflow: hidden;
 
   .certificate-card:hover & {
-    transform: scale(1.02); // Hover efekti azaltıldı
+    transform: scale(1.02);
   }
 }
 
@@ -120,7 +113,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px; // Dikdörtgen için radius azaltıldı
+  border-radius: 10px;
   opacity: 0;
   transition: opacity 0.5s ease;
 
@@ -157,9 +150,6 @@
     opacity: 0;
   }
 }
-
-// Certificate Badge düzeltmesi
-
 
 .view-overlay {
   position: absolute;
@@ -287,9 +277,7 @@
   font-size: 0.9rem;
 }
 
-// Styles cleaned up - PDF support removed
-
-// Lightbox Styles - Fixed positioning
+// Lightbox Styles
 .lightbox-overlay {
   position: fixed;
   top: 0;
@@ -578,14 +566,7 @@
 // Mobile Responsive Styles
 @media (max-width: 768px) {
   .certificate-image {
-    min-height: 220px; // Mobile'da biraz daha küçük
-    padding: 1rem; // Mobile padding düzeltildi
+    min-height: 220px;
+    padding: 1rem;
   }
-
-  .certificate-icon-wrapper {
-    width: 100%; // Mobile'da full genişlik
-    height: 100%; // Mobile'da full yükseklik
-  }
-
-
 }

@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
 import { ServicesComponent } from './components/services/services.component';
 import { CertificatesComponent } from './components/certificates/certificates.component';
+import { FaqComponent } from './components/faq/faq.component';
 import { HealingProcessComponent } from './components/healing-process/healing-process.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -14,7 +15,7 @@ import { PwaPromptComponent } from './components/pwa-prompt/pwa-prompt.component
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, HomeComponent, AboutComponent, ServicesComponent, CertificatesComponent, HealingProcessComponent, ContactComponent, FooterComponent, PwaPromptComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, HomeComponent, AboutComponent, ServicesComponent, CertificatesComponent, FaqComponent, HealingProcessComponent, ContactComponent, FooterComponent, PwaPromptComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush
