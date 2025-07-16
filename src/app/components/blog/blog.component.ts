@@ -57,8 +57,8 @@ export class BlogComponent implements OnInit {
 
       const allPosts: BlogPost[] = await response.json();
 
-      // Sadece son 12 post'u göster (performans için)
-      this.posts = allPosts.slice(0, 12);
+      // Sadece son 6 post'u göster (performans için)
+      this.posts = allPosts.slice(0, 6);
 
       // Change detection'ı manuel trigger et
       this.cdr.markForCheck();
