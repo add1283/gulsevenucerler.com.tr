@@ -91,8 +91,7 @@ jobs:
           📄 Updated files: blog-data.json, sitemap.xml
           🤖 Auto-sync triggered by: ${{ github.event_name }}
           📊 Files changed: $CHANGED_FILES
-
-          [skip ci]"
+          "
 
           git commit -m "$COMMIT_MSG"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main

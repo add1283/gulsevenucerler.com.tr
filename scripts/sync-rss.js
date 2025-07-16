@@ -26,6 +26,15 @@ function createSlug(title) {
     .replace(/^-+|-+$/g, ''); // başında/sonunda tire kaldır
 }
 
+function extractImageFromDescription(description) {
+  // <img ... src="..."> yakala
+  const imgMatch = description.match(/<img[^>]+src=["']([^"'>]+)["']/i);
+  if (imgMatch && imgMatch[1]) {
+    return imgMatch[1];
+  }
+  return null;
+}
+
 function parseRSSContent(rssText) {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(rssText, 'text/xml');
@@ -46,6 +55,12 @@ function parseRSSContent(rssText) {
     if (!title.trim()) {
       console.warn('⚠️  Skipping post with empty title');
       continue;
+    }
+
+    // Görseli description'dan çek
+    let image = extractImageFromDescription(description);
+    if (!image) {
+      image = '/images/default-blog-image.png';
     }
 
     // İçeriği temizle (HTML tag'leri kaldır)
@@ -72,7 +87,7 @@ function parseRSSContent(rssText) {
       excerpt,
       content: cleanDescription,
       originalUrl: link,
-      image: '/images/default-blog-image.png',
+      image,
       publishedAt: publishDate.toISOString(),
       publishedDate: publishDate.toLocaleDateString('tr-TR'),
       readTime: Math.max(1, Math.ceil(cleanDescription.split(' ').length / 200)) // ortalama okuma süresi
@@ -131,11 +146,18 @@ function updateSitemap(posts) {
   // Mevcut blog URL'lerini kaldır
   sitemap = sitemap.replace(/<url>\s*<loc>https:\/\/gulsevenucerler\.com\.tr\/blog.*?<\/url>/gs, '');
 
-  // Blog ana sayfası ekle (lastmod sadece yeni post varsa güncellenir)
+  // Blog ana sayfası ve /blog/ sabit ekle
   const today = new Date().toISOString().split('T')[0];
   const blogMainUrl = `
   <url>
     <loc>https://gulsevenucerler.com.tr/blog</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <lastmod>${today}</lastmod>
+  </url>`;
+  const blogSlashUrl = `
+  <url>
+    <loc>https://gulsevenucerler.com.tr/blog/</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
     <lastmod>${today}</lastmod>
@@ -151,7 +173,7 @@ function updateSitemap(posts) {
   </url>`).join('');
 
   // </urlset> tag'inden önce blog URL'lerini ekle
-  sitemap = sitemap.replace('</urlset>', blogMainUrl + blogUrls + '\n</urlset>');
+  sitemap = sitemap.replace('</urlset>', blogMainUrl + blogSlashUrl + blogUrls + '\n</urlset>');
 
   fs.writeFileSync(sitemapPath, sitemap);
   console.log(`✅ Sitemap updated with ${posts.length} blog posts`);
