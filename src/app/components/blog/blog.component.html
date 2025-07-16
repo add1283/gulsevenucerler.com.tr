@@ -28,12 +28,11 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
         <article *ngFor="let post of posts; let i = index" class="blog-card group cursor-pointer"
-          [style.animation-delay.ms]="i * 100" (click)="goToPost(post)">
+          [style.animation-delay.ms]="i * 100">
 
           <!-- Card Content -->
-          <div
-            class="bg-white/80 backdrop-blur-lg border border-white/20 rounded-2xl overflow-hidden transition-all duration-300 hover:bg-white/90 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col">
-
+          <a [href]="post.originalUrl" target="_blank" rel="noopener"
+            class="block bg-white/80 backdrop-blur-lg border border-white/20 rounded-2xl overflow-hidden transition-all duration-300 hover:bg-white/90 hover:shadow-xl hover:-translate-y-2 h-full flex flex-col no-underline">
             <!-- Blog Image -->
             <div class="relative h-48 overflow-hidden">
               <img [src]="post.image || '/images/default-blog-image.png'" [alt]="post.title"
@@ -81,19 +80,8 @@
                   </path>
                 </svg>
               </div>
-              <!-- AMP Link -->
-              <div class="pt-3 border-t border-zen-100">
-                <a [href]="'/amp/' + post.slug"
-                  class="text-xs text-zen-500 hover:text-primary-600 flex items-center gap-1 transition-colors duration-300"
-                  title="Hızlı Mobil Sürüm (AMP)">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                  </svg>
-                  AMP Sürüm
-                </a>
-              </div>
             </div>
-          </div>
+          </a>
         </article>
       </div>
 

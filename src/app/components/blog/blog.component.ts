@@ -1,6 +1,5 @@
 import { Component, OnInit, NgZone, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { Router } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 
@@ -35,7 +34,6 @@ export class BlogComponent implements OnInit {
   private isBrowser: boolean;
 
   constructor(
-    private router: Router,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -180,10 +178,6 @@ export class BlogComponent implements OnInit {
     script.id = 'blog-list-structured-data';
     script.textContent = JSON.stringify(combinedStructuredData);
     this.document.head.appendChild(script);
-  }
-
-  goToPost(post: BlogPost) {
-    this.router.navigate(['/blog', post.slug]);
   }
 
   // Debug helpers

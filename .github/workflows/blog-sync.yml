@@ -38,21 +38,8 @@ jobs:
             echo "✅ RSS sync completed successfully"
           else
             exit_code=$?
-            case $exit_code in
-              0)
-                echo "sync_status=no_changes" >> $GITHUB_OUTPUT
-                echo "ℹ️  No changes detected, skipping commit"
-                ;;
-              2)
-                echo "sync_status=not_ready" >> $GITHUB_OUTPUT
-                echo "⏸️  Blog RSS not ready yet, skipping sync"
-                ;;
-              *)
-                echo "sync_status=failed" >> $GITHUB_OUTPUT
-                echo "❌ RSS sync failed with exit code: $exit_code"
-                exit 1
-                ;;
-            esac
+            echo "sync_status=failure" >> $GITHUB_OUTPUT
+            exit $exit_code
           fi
         env:
           # Blogspot RSS URL (kullanıcı tarafından ayarlanacak)
@@ -98,7 +85,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Deployment kısmı kaldırıldı - deploy.yml bunu hallediyor
+      - name: Build & Deploy
+        run: |
+          npm run build:github-pages
+          cp dist/gulsevenucerler.com.tr/browser/index.csr.html dist/gulsevenucerler.com.tr/browser/index.html
+          cp dist/gulsevenucerler.com.tr/browser/index.csr.html dist/gulsevenucerler.com.tr/browser/404.html
+          if [ -f CNAME ]; then cp CNAME dist/gulsevenucerler.com.tr/browser/; fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./dist/gulsevenucerler.com.tr/browser"
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
 
       - name: Workflow Summary
         run: |
