@@ -57,25 +57,35 @@ function parseRSSContent(rssText) {
       continue;
     }
 
-    // Görseli description'dan çek
-    let image = extractImageFromDescription(description);
-    if (!image) {
-      image = '/images/default-blog-image.png';
+    // Görseli önce <media:thumbnail> etiketi varsa oradan, yoksa description'dan çek
+    let image = null;
+    const mediaThumbnail = item.getElementsByTagName('media:thumbnail')[0];
+    if (mediaThumbnail && mediaThumbnail.getAttribute('url')) {
+      image = mediaThumbnail.getAttribute('url');
+    } else {
+      image = extractImageFromDescription(description);
+      if (!image) {
+        image = '/images/default-blog-image.png';
+      }
     }
 
     // İçeriği temizle (HTML tag'leri kaldır)
-    const cleanDescription = description
+    let cleanDescription = description
       .replace(/<[^>]*>/g, '') // HTML tag'leri kaldır
       .replace(/&quot;/g, '"')
       .replace(/&amp;/g, '&')
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&#39;/g, "'")
+      .replace(/&[a-zA-Z0-9#]+;/g, '') // Kalan tüm entity'leri kaldır
       .trim();
 
-    // Excerpt oluştur (ilk 200 karakter)
-    const excerpt = cleanDescription.length > 200
-      ? cleanDescription.substring(0, 200) + '...'
-      : cleanDescription;
+    // Excerpt oluştur (ilk 150 karakter, fazlası ...)
+    let excerpt = cleanDescription;
+    if (excerpt.length > 150) {
+      excerpt = excerpt.substring(0, 150).trim() + '...';
+    }
 
     const slug = createSlug(title);
     const publishDate = new Date(pubDate);
