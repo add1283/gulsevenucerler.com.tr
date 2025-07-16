@@ -1,6 +1,3 @@
-<!-- Header -->
-<app-header></app-header>
-
 <!-- Blog Section -->
 <section id="blog" class="pt-32 pb-24 bg-gradient-to-br from-secondary-50 to-primary-50 relative overflow-hidden">
   <div class="absolute top-0 left-0 w-64 h-64 bg-primary-100/30 rounded-full blur-3xl"></div>
@@ -13,12 +10,26 @@
         class="inline-block px-6 py-3 bg-primary-100/80 text-primary-700 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-primary-200/50">
         📝 Blog
       </span>
-      <h1 class="text-4xl md:text-5xl font-lora font-bold text-zen-800 mb-6">
+      <h2 class="text-4xl md:text-5xl font-lora font-bold text-zen-800 mb-6">
         Enerji ve <span class="text-gradient">Şifa Yazıları</span>
-      </h1>
+      </h2>
       <p class="text-xl text-zen-600 max-w-3xl mx-auto leading-relaxed">
         Theta Healing, Reiki, AccessBars ve enerji şifacılığı hakkında güncel yazılar ve deneyimler
       </p>
+      <div class="mt-6 flex justify-center">
+        <a href="https://gulsevenucerler.blogspot.com/" target="_blank" rel="noopener"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 hover:from-primary-700 hover:to-primary-800 hover:shadow-xl hover:scale-105 transform">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          <span>Tüm Blog Yazılarına Git</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      </div>
     </div>
 
     <!-- Blog Posts Grid -->
@@ -97,44 +108,3 @@
     </div>
   </div>
 </section>
-
-<!-- BlogSpot Redirect Button -->
-<section class="py-20 relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-secondary-50/30"></div>
-  <div class="absolute top-0 left-0 w-64 h-64 bg-primary-100/30 rounded-full blur-3xl"></div>
-  <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary-100/20 rounded-full blur-3xl"></div>
-
-  <div class="container mx-auto px-4 relative z-10">
-    <div class="max-w-4xl mx-auto text-center">
-      <div class="bg-white/80 backdrop-blur-lg border border-white/20 rounded-3xl p-12 shadow-xl">
-        <div class="text-6xl mb-6">📚</div>
-        <h2 class="text-3xl font-bold text-zen-800 mb-4">Daha Fazla İçerik</h2>
-        <p class="text-zen-600 text-lg mb-8 leading-relaxed">
-          Enerji iyileştirme, kişisel gelişim ve ruhsal büyüme hakkında daha fazla yazı ve güncellemeler için
-          ana blog sayfamızı ziyaret edebilirsiniz.
-        </p>
-
-        <button onclick="window.open('#', '_blank')"
-          class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 hover:from-primary-700 hover:to-primary-800 hover:shadow-xl hover:scale-105 transform">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
-            </path>
-          </svg>
-          <span>Ana Blog'a Git</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-          </svg>
-        </button>
-
-        <div class="mt-6 text-sm text-zen-500">
-          * Ana blog sayfamıza yönlendirileceksiniz
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<app-footer></app-footer>

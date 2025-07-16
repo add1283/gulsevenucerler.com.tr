@@ -1,7 +1,6 @@
 import { Component, OnInit, NgZone, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
+
 
 interface BlogPost {
   id: string;
@@ -24,7 +23,7 @@ interface BlogData {
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
 })

@@ -11,11 +11,12 @@ import { HealingProcessComponent } from './components/healing-process/healing-pr
 import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PwaPromptComponent } from './components/pwa-prompt/pwa-prompt.component';
+import { BlogComponent } from './components/blog/blog.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, HomeComponent, AboutComponent, ServicesComponent, CertificatesComponent, FaqComponent, HealingProcessComponent, ContactComponent, FooterComponent, PwaPromptComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, HomeComponent, AboutComponent, ServicesComponent, CertificatesComponent, FaqComponent, HealingProcessComponent, ContactComponent, FooterComponent, PwaPromptComponent, BlogComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush
