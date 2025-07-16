@@ -47,10 +47,25 @@
 
   
 
+  
+  
+
   <url>
     <loc>https://gulsevenucerler.com.tr/blog</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <lastmod>2025-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://gulsevenucerler.com.tr/blog/</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2025-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://gulsevenucerler.com.tr/blog/test-2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <lastmod>2025-07-16</lastmod>
   </url>
   <url>
