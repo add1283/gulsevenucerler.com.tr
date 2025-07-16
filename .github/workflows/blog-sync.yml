@@ -10,7 +10,9 @@ on:
 
 # GitHub Actions permissions
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   sync-blog:
