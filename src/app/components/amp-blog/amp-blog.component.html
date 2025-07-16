@@ -24,26 +24,29 @@
 
     <!-- Featured Image -->
     <div class="amp-featured-image">
-      <img [src]="post?.image || '/images/default-blog-image.png'" [alt]="post?.title" width="600" height="315"
+      <img [src]="post.image || '/images/default-blog-image.png'" [alt]="post.title" width="600" height="315"
         layout="responsive" />
     </div>
 
     <!-- Article Meta -->
     <div class="amp-meta">
-      <time class="amp-date">{{ post?.publishedDate }}</time>
-      <span class="amp-read-time">{{ post?.readTime }} dk okuma</span>
+      <time class="amp-date">{{ post.publishedDate }}</time>
+      <span class="amp-read-time">{{ post.readTime }} dk okuma</span>
     </div>
 
     <!-- Article Title -->
-    <h1 class="amp-title">{{ post?.title }}</h1>
+    <h1 class="amp-title">{{ post.title }}</h1>
 
     <!-- Article Excerpt -->
     <div class="amp-excerpt">
-      {{ post?.excerpt }}
+      {{ post.excerpt }}
     </div>
 
     <!-- Article Content -->
-    <div class="amp-content" [innerHTML]="post?.content"></div>
+    <div class="amp-content" [innerHTML]="post.ampContent"></div>
+
+    <!-- Social Share Buttons (AMP HTML) -->
+    <div [innerHTML]="ampShareHtml"></div>
 
     <!-- Read Original Post -->
     <div class="amp-original-link">

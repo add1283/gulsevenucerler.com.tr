@@ -57,31 +57,40 @@ function parseRSSContent(rssText) {
       continue;
     }
 
-    // Görseli önce <media:thumbnail> etiketi varsa oradan, yoksa description'dan çek
-    let image = null;
-    const mediaThumbnail = item.getElementsByTagName('media:thumbnail')[0];
-    if (mediaThumbnail && mediaThumbnail.getAttribute('url')) {
-      image = mediaThumbnail.getAttribute('url');
-    } else {
-      image = extractImageFromDescription(description);
-      if (!image) {
+    // Content: description'ın decode edilmiş tam HTML'i
+    const decodeHtml = (html) => {
+      return html.replace(/&lt;/g, '<')
+                 .replace(/&gt;/g, '>')
+                 .replace(/&amp;/g, '&')
+                 .replace(/&quot;/g, '"')
+                 .replace(/&#39;/g, "'");
+    };
+    const rawContent = decodeHtml(description);
+    const content = transformBlogHtml(rawContent);
+    const ampContent = transformBlogHtmlAmp(rawContent);
+
+    // Görsel: önce description'daki <img>, yoksa media:thumbnail (büyük boyutlu)
+    let image = extractImageFromDescription(description);
+    if (!image) {
+      const mediaThumbnail = item.getElementsByTagName('media:thumbnail')[0];
+      if (mediaThumbnail && mediaThumbnail.getAttribute('url')) {
+        image = mediaThumbnail.getAttribute('url').replace(/=s\d{2,4}(-c)?$/, '=s1600');
+      } else {
         image = '/images/default-blog-image.png';
       }
     }
 
-    // İçeriği temizle (HTML tag'leri kaldır)
+    // Excerpt: temiz metin, entity'ler ve HTML'siz, 150 karakter
     let cleanDescription = description
       .replace(/<[^>]*>/g, '') // HTML tag'leri kaldır
       .replace(/&quot;/g, '"')
       .replace(/&amp;/g, '&')
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
-      .replace(/&nbsp;/gi, ' ')
       .replace(/&#39;/g, "'")
-      .replace(/&[a-zA-Z0-9#]+;/g, '') // Kalan tüm entity'leri kaldır
+      .replace(/&nbsp;/gi, ' ')
       .trim();
-
-    // Excerpt oluştur (ilk 150 karakter, fazlası ...)
+    cleanDescription = decodeEntities(cleanDescription);
     let excerpt = cleanDescription;
     if (excerpt.length > 150) {
       excerpt = excerpt.substring(0, 150).trim() + '...';
@@ -95,7 +104,8 @@ function parseRSSContent(rssText) {
       title: title.trim(),
       slug,
       excerpt,
-      content: cleanDescription,
+      content: content,
+      ampContent: ampContent,
       originalUrl: link,
       image,
       publishedAt: publishDate.toISOString(),
@@ -187,6 +197,108 @@ function updateSitemap(posts) {
 
   fs.writeFileSync(sitemapPath, sitemap);
   console.log(`✅ Sitemap updated with ${posts.length} blog posts`);
+}
+
+// Tüm HTML entity'lerini temizle (decode)
+function decodeEntities(text) {
+  return text.replace(/&#?[a-zA-Z0-9]+;/g, ' ');
+}
+
+// Blog içeriğini dönüştür: img'lere lazyload ve lightbox, sosyal medya embed
+function transformBlogHtml(html) {
+  // 1. <img> etiketlerine loading="lazy" ve data-lightbox="blog" ekle
+  html = html.replace(/<img([^>]*?)>/gi, (match, attrs) => {
+    // loading ve data-lightbox zaten varsa tekrar ekleme
+    let newAttrs = attrs;
+    if (!/loading=/.test(attrs)) newAttrs += ' loading="lazy"';
+    if (!/data-lightbox=/.test(attrs)) newAttrs += ' data-lightbox="blog"';
+    return `<img${newAttrs}>`;
+  });
+
+  // 2. YouTube link veya iframe'lerini responsive embed'e çevir
+  // a) YouTube linklerini iframe'e çevir
+  html = html.replace(/<a[^>]+href=["'](https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/[^"]+)["'][^>]*>[^<]*<\/a>/gi, (match, url) => {
+    const videoId = extractYouTubeId(url);
+    if (videoId) {
+      return `<div class="youtube-embed"><iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen loading="lazy"></iframe></div>`;
+    }
+    return match;
+  });
+  // b) YouTube iframe'lerini responsive yap
+  html = html.replace(/<iframe[^>]+src=["']https?:\/\/(www\.)?(youtube\.com|youtu\.be)[^"']+["'][^>]*><\/iframe>/gi, (iframe) => {
+    // loading="lazy" ekle
+    if (!/loading=/.test(iframe)) {
+      return iframe.replace('<iframe', '<iframe loading="lazy"');
+    }
+    return iframe;
+  });
+
+  // 3. X (Twitter) linklerini embed'e çevir
+  html = html.replace(/<a[^>]+href=["'](https?:\/\/(www\.)?twitter\.com\/[^"]+status\/[0-9]+)["'][^>]*>[^<]*<\/a>/gi, (match, url) => {
+    return `<blockquote class="twitter-tweet"><a href="${url}"></a></blockquote>`;
+  });
+
+  // 4. Instagram gönderi linklerini embed'e çevir
+  html = html.replace(/<a[^>]+href=["'](https?:\/\/(www\.)?instagram\.com\/p\/[A-Za-z0-9_-]+)["'][^>]*>[^<]*<\/a>/gi, (match, url) => {
+    return `<blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14"></blockquote>`;
+  });
+
+  return html;
+}
+
+// YouTube video ID'sini linkten çıkar
+function extractYouTubeId(url) {
+  // youtube.com/watch?v=... veya youtu.be/... gibi
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
+// AMP için dönüştürme
+function transformBlogHtmlAmp(html) {
+  // <img> -> <amp-img> (lightbox ile)
+  html = html.replace(/<img([^>]*?)>/gi, (match, attrs) => {
+    // src, alt, width, height bul
+    const srcMatch = attrs.match(/src=["']([^"']+)["']/i);
+    const altMatch = attrs.match(/alt=["']([^"']*)["']/i);
+    const src = srcMatch ? srcMatch[1] : '';
+    const alt = altMatch ? altMatch[1] : '';
+    return `<amp-img src="${src}" alt="${alt}" width="600" height="400" layout="responsive" lightbox></amp-img>`;
+  });
+  // YouTube linklerini <amp-youtube> embed'e çevir
+  html = html.replace(/<a[^>]+href=["'](https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/[^"]+)["'][^>]*>[^<]*<\/a>/gi, (match, url) => {
+    const videoId = extractYouTubeId(url);
+    if (videoId) {
+      return `<amp-youtube data-videoid="${videoId}" layout="responsive" width="480" height="270"></amp-youtube>`;
+    }
+    return match;
+  });
+  // YouTube iframe'lerini <amp-youtube> ile değiştir
+  html = html.replace(/<iframe[^>]+src=["']https?:\/\/(www\.)?(youtube\.com|youtu\.be)[^"']+["'][^>]*><\/iframe>/gi, (iframe) => {
+    const srcMatch = iframe.match(/src=["']([^"']+)["']/i);
+    if (srcMatch) {
+      const videoId = extractYouTubeId(srcMatch[1]);
+      if (videoId) {
+        return `<amp-youtube data-videoid="${videoId}" layout="responsive" width="480" height="270"></amp-youtube>`;
+      }
+    }
+    return '';
+  });
+  // Twitter linklerini <amp-twitter> embed'e çevir
+  html = html.replace(/<a[^>]+href=["'](https?:\/\/(www\.)?twitter\.com\/[^"]+status\/[0-9]+)["'][^>]*>[^<]*<\/a>/gi, (match, url) => {
+    const tweetId = url.match(/status\/([0-9]+)/);
+    if (tweetId) {
+      return `<amp-twitter width="375" height="472" layout="responsive" data-tweetid="${tweetId[1]}"></amp-twitter>`;
+    }
+    return match;
+  });
+  // Instagram gönderi linklerini <amp-instagram> embed'e çevir
+  html = html.replace(/<a[^>]+href=["'](https?:\/\/(www\.)?instagram\.com\/p\/([A-Za-z0-9_-]+))["'][^>]*>[^<]*<\/a>/gi, (match, url, _, shortcode) => {
+    if (shortcode) {
+      return `<amp-instagram data-shortcode="${shortcode}" width="400" height="400" layout="responsive"></amp-instagram>`;
+    }
+    return match;
+  });
+  return html;
 }
 
 async function main() {
