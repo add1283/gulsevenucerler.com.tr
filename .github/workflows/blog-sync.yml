@@ -87,6 +87,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Inject EmailJS Environment Variables
+        run: |
+          sed -i "s/__EMAILJS_SERVICE_ID__/${{ secrets.EMAILJS_SERVICE_ID }}/g" src/environments/environment.prod.ts
+          sed -i "s/__EMAILJS_TEMPLATE_ID__/${{ secrets.EMAILJS_TEMPLATE_ID }}/g" src/environments/environment.prod.ts
+          sed -i "s/__EMAILJS_PUBLIC_KEY__/${{ secrets.EMAILJS_PUBLIC_KEY }}/g" src/environments/environment.prod.ts
+
+          sed -i "s/__EMAILJS_SERVICE_ID__/${{ secrets.EMAILJS_SERVICE_ID }}/g" src/app/components/contact/contact.component.ts
+          sed -i "s/__EMAILJS_TEMPLATE_ID__/${{ secrets.EMAILJS_TEMPLATE_ID }}/g" src/app/components/contact/contact.component.ts
+          sed -i "s/__EMAILJS_PUBLIC_KEY__/${{ secrets.EMAILJS_PUBLIC_KEY }}/g" src/app/components/contact/contact.component.ts
+
+          echo "EmailJS environment variables injected successfully"
+
       - name: Build & Deploy
         run: |
           npm run build:github-pages
